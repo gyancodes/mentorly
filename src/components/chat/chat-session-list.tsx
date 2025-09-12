@@ -49,22 +49,32 @@ export function ChatSessionList({
 
   const handleDeleteSession = (sessionId: string, e: React.MouseEvent) => {
     e.stopPropagation() // Prevent session selection when clicking delete
-    if (confirm('Are you sure you want to delete this chat session?')) {
-      // Show immediate feedback first
-      toast.loading('Deleting chat...', { id: `delete-${sessionId}` })
-      
-      // Small delay before optimistic update to ensure toast is visible
-      setTimeout(() => {
-        // Optimistic update - remove from UI after toast is shown
-        const utils = trpc.useUtils()
-        utils.chat.getSessions.setData({}, (oldData) => {
-          if (!oldData) return oldData
-          return oldData.filter(session => session.id !== sessionId)
-        })
-      }, 100)
-      
-      deleteSessionMutation.mutate({ sessionId })
-    }
+    
+    toast('Are you sure you want to delete this chat session?', {
+      action: {
+        label: 'Delete',
+        onClick: () => {
+          // Show immediate feedback first
+          toast.loading('Deleting chat...', { id: `delete-${sessionId}` })
+          
+          // Small delay before optimistic update to ensure toast is visible
+          setTimeout(() => {
+            // Optimistic update - remove from UI after toast is shown
+            const utils = trpc.useUtils()
+            utils.chat.getSessions.setData({}, (oldData) => {
+              if (!oldData) return oldData
+              return oldData.filter(session => session.id !== sessionId)
+            })
+          }, 100)
+          
+          deleteSessionMutation.mutate({ sessionId })
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {}
+      }
+    })
   }
 
   if (isLoading) {

@@ -49,7 +49,8 @@ export function ChatMessage({ content, role, timestamp, status, enableTyping = f
 
         {/* Message Content */}
         <div className={cn(
-          'rounded-xl px-3 py-2.5 shadow-sm backdrop-blur-sm border transition-all duration-200 min-w-0 flex-1 break-words overflow-wrap-anywhere',
+          'rounded-xl px-3 py-2.5 shadow-sm backdrop-blur-sm border transition-all duration-200 min-w-0 break-words overflow-wrap-anywhere',
+          isUser ? 'max-w-fit' : 'flex-1',
           isUser
             ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-400/20 shadow-blue-500/20'
             : 'bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 border-gray-200/50 dark:border-gray-600/50 shadow-gray-500/10',
