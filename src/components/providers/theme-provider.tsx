@@ -41,8 +41,8 @@ export function ThemeProvider({
   }, [storageKey])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    
+    if (typeof window === 'undefined') {return}
+
     const root = window.document.documentElement
 
     root.classList.remove('light', 'dark')
@@ -90,7 +90,7 @@ export const useTheme = () => {
   const context = useContext(ThemeProviderContext)
 
   if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider')
+    {throw new Error('useTheme must be used within a ThemeProvider')}
 
   return context
 }

@@ -8,152 +8,272 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 })
 
+/**
+ * Represents the context of a career counseling conversation
+ * Used to track user's background and conversation progress for personalized responses
+ */
 interface ConversationContext {
-  userBackground?: string;
-  careerGoals?: string;
-  currentSituation?: string;
-  previousTopics?: string[];
-  conversationStage?: 'initial' | 'exploring' | 'planning' | 'implementing';
+  /** User's professional background or career stage */
+  userBackground?: string
+  /** User's stated career goals and aspirations */
+  careerGoals?: string
+  /** Current professional situation (student, career change, etc.) */
+  currentSituation?: string
+  /** Array of topics discussed in previous messages */
+  previousTopics?: string[]
+  /** Current stage of the conversation flow */
+  conversationStage?: 'initial' | 'exploring' | 'planning' | 'implementing'
 }
 
-function extractUserContext(messages: Array<{ role: 'user' | 'assistant'; content: string }>): ConversationContext {
-  const userMessages = messages.filter(msg => msg.role === 'user');
+/**
+ * Analyzes conversation messages to extract user context and determine conversation stage
+ * 
+ * @param messages - Array of conversation messages with role and content
+ * @returns ConversationContext object with extracted user information and conversation stage
+ * 
+ * @example
+ * ```typescript
+ * const context = extractUserContext([
+ *   { role: 'user', content: 'I am a recent graduate looking for my first job' },
+ *   { role: 'assistant', content: 'Great! Let me help you...' }
+ * ]);
+ * // Returns: { currentSituation: 'student/recent graduate', conversationStage: 'initial' }
+ * ```
+ */
+function extractUserContext(
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>
+): ConversationContext {
+  const userMessages = messages.filter(msg => msg.role === 'user')
   const context: ConversationContext = {
     previousTopics: [],
-    conversationStage: 'initial'
-  };
+    conversationStage: 'initial',
+  }
 
   // Analyze conversation to extract context
-  const allUserText = userMessages.map(msg => msg.content).join(' ').toLowerCase();
-  
+  const allUserText = userMessages
+    .map(msg => msg.content)
+    .join(' ')
+    .toLowerCase()
+
   // Detect career stage
-  if (allUserText.includes('student') || allUserText.includes('graduate') || allUserText.includes('university')) {
-    context.currentSituation = 'student/recent graduate';
-  } else if (allUserText.includes('career change') || allUserText.includes('transition')) {
-    context.currentSituation = 'career transition';
-  } else if (allUserText.includes('promotion') || allUserText.includes('advance')) {
-    context.currentSituation = 'career advancement';
+  if (
+    allUserText.includes('student') ||
+    allUserText.includes('graduate') ||
+    allUserText.includes('university')
+  ) {
+    context.currentSituation = 'student/recent graduate'
+  } else if (
+    allUserText.includes('career change') ||
+    allUserText.includes('transition')
+  ) {
+    context.currentSituation = 'career transition'
+  } else if (
+    allUserText.includes('promotion') ||
+    allUserText.includes('advance')
+  ) {
+    context.currentSituation = 'career advancement'
   }
 
   // Detect conversation stage based on message count and content
   if (messages.length <= 2) {
-    context.conversationStage = 'initial';
+    context.conversationStage = 'initial'
   } else if (messages.length <= 6) {
-    context.conversationStage = 'exploring';
-  } else if (allUserText.includes('plan') || allUserText.includes('roadmap') || allUserText.includes('steps')) {
-    context.conversationStage = 'planning';
+    context.conversationStage = 'exploring'
+  } else if (
+    allUserText.includes('plan') ||
+    allUserText.includes('roadmap') ||
+    allUserText.includes('steps')
+  ) {
+    context.conversationStage = 'planning'
   } else {
-    context.conversationStage = 'implementing';
+    context.conversationStage = 'implementing'
   }
 
-  return context;
+  return context
 }
 
+/**
+ * Generates contextually appropriate follow-up questions based on conversation stage
+ * 
+ * @param context - The current conversation context
+ * @returns Array of relevant follow-up questions for the current stage
+ * 
+ * @example
+ * ```typescript
+ * const questions = generateFollowUpQuestions({ conversationStage: 'initial' });
+ * // Returns: ["What's your current professional situation?", ...]
+ * ```
+ */
 function generateFollowUpQuestions(context: ConversationContext): string[] {
-  const questions: string[] = [];
-  
+  const questions: string[] = []
+
   switch (context.conversationStage) {
     case 'initial':
       questions.push(
         "What's your current professional situation?",
-        "What are your main career goals for the next 2-3 years?",
-        "What challenges are you facing in your career right now?"
-      );
-      break;
+        'What are your main career goals for the next 2-3 years?',
+        'What challenges are you facing in your career right now?'
+      )
+      break
     case 'exploring':
       questions.push(
-        "Which of these options resonates most with you and why?",
-        "What skills do you feel most confident about?",
-        "What concerns you most about making this change?"
-      );
-      break;
+        'Which of these options resonates most with you and why?',
+        'What skills do you feel most confident about?',
+        'What concerns you most about making this change?'
+      )
+      break
     case 'planning':
       questions.push(
-        "Which step feels most challenging to you?",
-        "What timeline are you working with?",
-        "What resources do you currently have available?"
-      );
-      break;
+        'Which step feels most challenging to you?',
+        'What timeline are you working with?',
+        'What resources do you currently have available?'
+      )
+      break
     case 'implementing':
       questions.push(
-        "How is your progress going so far?",
-        "What obstacles have you encountered?",
-        "What would be most helpful for your next steps?"
-      );
-      break;
+        'How is your progress going so far?',
+        'What obstacles have you encountered?',
+        'What would be most helpful for your next steps?'
+      )
+      break
   }
-  
-  return questions;
+
+  return questions
 }
 
+/**
+ * Builds response structure guidelines based on conversation stage
+ * 
+ * @param context - The current conversation context
+ * @returns String containing structured response guidelines for the AI
+ * 
+ * @example
+ * ```typescript
+ * const structure = buildStructuredResponse({ conversationStage: 'planning' });
+ * // Returns structured guidance for planning stage responses
+ * ```
+ */
 function buildStructuredResponse(context: ConversationContext): string {
-  let structure = '';
-  
+  let structure = ''
+
   switch (context.conversationStage) {
     case 'initial':
-      structure = '\n\nRESPONSE STRUCTURE: 1) Warm acknowledgment 2) Ask 1-2 key questions to understand their situation 3) Offer initial perspective or encouragement';
-      break;
+      structure =
+        '\n\nRESPONSE STRUCTURE: 1) Warm acknowledgment 2) Ask 1-2 key questions to understand their situation 3) Offer initial perspective or encouragement'
+      break
     case 'exploring':
-      structure = '\n\nRESPONSE STRUCTURE: 1) Acknowledge their input 2) Analyze their situation 3) Present 2-3 options with pros/cons 4) Ask which direction interests them most';
-      break;
+      structure =
+        '\n\nRESPONSE STRUCTURE: 1) Acknowledge their input 2) Analyze their situation 3) Present 2-3 options with pros/cons 4) Ask which direction interests them most'
+      break
     case 'planning':
-      structure = '\n\nRESPONSE STRUCTURE: 1) Acknowledge their goals 2) Break down into clear steps 3) Provide specific actionable advice 4) Ask about timeline or resources';
-      break;
+      structure =
+        '\n\nRESPONSE STRUCTURE: 1) Acknowledge their goals 2) Break down into clear steps 3) Provide specific actionable advice 4) Ask about timeline or resources'
+      break
     case 'implementing':
-      structure = '\n\nRESPONSE STRUCTURE: 1) Acknowledge progress 2) Address specific challenges 3) Provide practical solutions 4) Encourage next steps';
-      break;
+      structure =
+        '\n\nRESPONSE STRUCTURE: 1) Acknowledge progress 2) Address specific challenges 3) Provide practical solutions 4) Encourage next steps'
+      break
   }
-  
-  return structure;
+
+  return structure
 }
 
-function buildContextualPrompt(context: ConversationContext, isFirstMessage: boolean): string {
-  let contextualInstructions = '';
-  
+/**
+ * Constructs contextual prompt instructions for the AI based on conversation state
+ * 
+ * @param context - The current conversation context
+ * @param isFirstMessage - Whether this is the first message in the conversation
+ * @returns Contextual instructions string for the AI system prompt
+ * 
+ * @example
+ * ```typescript
+ * const prompt = buildContextualPrompt(
+ *   { conversationStage: 'exploring', currentSituation: 'career transition' },
+ *   false
+ * );
+ * // Returns detailed contextual instructions for the AI
+ * ```
+ */
+function buildContextualPrompt(
+  context: ConversationContext,
+  isFirstMessage: boolean
+): string {
+  let contextualInstructions = ''
+
   if (isFirstMessage) {
-    contextualInstructions += '\n\nThis is the start of a new conversation. Begin with a warm greeting and ask 1-2 targeted questions to understand their situation better.';
+    contextualInstructions +=
+      '\n\nThis is the start of a new conversation. Begin with a warm greeting and ask 1-2 targeted questions to understand their situation better.'
   } else {
-    contextualInstructions += `\n\nConversation context: Stage is ${context.conversationStage}.`;
+    contextualInstructions += `\n\nConversation context: Stage is ${context.conversationStage}.`
     if (context.currentSituation) {
-      contextualInstructions += ` User appears to be in ${context.currentSituation} phase.`;
+      contextualInstructions += ` User appears to be in ${context.currentSituation} phase.`
     }
-    contextualInstructions += ' Build upon previous discussion and maintain conversation flow.';
+    contextualInstructions +=
+      ' Build upon previous discussion and maintain conversation flow.'
   }
 
   // Add structured response guidance
-  contextualInstructions += buildStructuredResponse(context);
-  
+  contextualInstructions += buildStructuredResponse(context)
+
   // Add follow-up question suggestions
-  const followUpQuestions = generateFollowUpQuestions(context);
-  contextualInstructions += `\n\nSUGGESTED FOLLOW-UP QUESTIONS: ${followUpQuestions.join(' | ')}`;
+  const followUpQuestions = generateFollowUpQuestions(context)
+  contextualInstructions += `\n\nSUGGESTED FOLLOW-UP QUESTIONS: ${followUpQuestions.join(' | ')}`
 
   switch (context.conversationStage) {
     case 'initial':
-      contextualInstructions += ' Focus on understanding their background, current situation, and goals.';
-      break;
+      contextualInstructions +=
+        ' Focus on understanding their background, current situation, and goals.'
+      break
     case 'exploring':
-      contextualInstructions += ' Help them explore options and possibilities. Ask deeper questions.';
-      break;
+      contextualInstructions +=
+        ' Help them explore options and possibilities. Ask deeper questions.'
+      break
     case 'planning':
-      contextualInstructions += ' Provide structured plans and actionable roadmaps.';
-      break;
+      contextualInstructions +=
+        ' Provide structured plans and actionable roadmaps.'
+      break
     case 'implementing':
-      contextualInstructions += ' Focus on practical implementation steps and troubleshooting.';
-      break;
+      contextualInstructions +=
+        ' Focus on practical implementation steps and troubleshooting.'
+      break
   }
 
-  return contextualInstructions;
+  return contextualInstructions
 }
 
-export async function generateCareerAdvice(messages: Array<{ role: 'user' | 'assistant'; content: string }>) {
+/**
+ * Generates personalized career advice using Groq AI based on conversation history
+ * 
+ * @param messages - Array of conversation messages with role and content
+ * @returns Promise resolving to AI-generated career advice string
+ * 
+ * @throws {Error} When API key is missing or AI generation fails
+ * 
+ * @example
+ * ```typescript
+ * const advice = await generateCareerAdvice([
+ *   { role: 'user', content: 'I want to transition from marketing to tech' },
+ *   { role: 'assistant', content: 'That\'s a great goal...' },
+ *   { role: 'user', content: 'What skills should I focus on?' }
+ * ]);
+ * // Returns personalized career advice based on conversation context
+ * ```
+ */
+export async function generateCareerAdvice(
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>
+) {
   try {
     // Extract conversation context
-    const context = extractUserContext(messages);
-    const isFirstMessage = messages.filter(msg => msg.role === 'user').length <= 1;
-    
+    const context = extractUserContext(messages)
+    const isFirstMessage =
+      messages.filter(msg => msg.role === 'user').length <= 1
+
     // Build contextual instructions
-    const contextualInstructions = buildContextualPrompt(context, isFirstMessage);
-    
+    const contextualInstructions = buildContextualPrompt(
+      context,
+      isFirstMessage
+    )
+
     const systemPrompt = `You are an experienced career counselor with more than 10 years of guiding students, graduates, and professionals. Your role is to provide meaningful, personalized career guidance.
 
 STYLE:
@@ -200,9 +320,9 @@ CONVERSATION FLOW:
     const chatMessages = [
       { role: 'system' as const, content: systemPrompt },
       ...messages.map(msg => ({
-        role: msg.role === 'user' ? 'user' as const : 'assistant' as const,
-        content: msg.content
-      }))
+        role: msg.role === 'user' ? ('user' as const) : ('assistant' as const),
+        content: msg.content,
+      })),
     ]
 
     const completion = await groq.chat.completions.create({
@@ -213,11 +333,14 @@ CONVERSATION FLOW:
       stream: true,
     })
 
-    let response = '';
+    let response = ''
     for await (const chunk of completion) {
-        response += chunk.choices[0]?.delta?.content || '';
+      response += chunk.choices[0]?.delta?.content || ''
     }
-    return response || 'I apologize, but I\'m having trouble generating a response right now. Please try again.';
+    return (
+      response ||
+      "I apologize, but I'm having trouble generating a response right now. Please try again."
+    )
   } catch (error) {
     console.error('Error generating career advice:', error)
     throw new Error('Failed to generate career advice')

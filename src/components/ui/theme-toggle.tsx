@@ -1,8 +1,9 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
-import { useTheme } from '../providers/theme-provider'
+
 import { cn } from '../../lib/utils'
+import { useTheme } from '../providers/theme-provider'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -24,9 +25,9 @@ export function ThemeToggle() {
         'shadow-sm hover:shadow-md',
         'group'
       )}
-      aria-label="Toggle theme"
+      aria-label='Toggle theme'
     >
-      <div className="relative w-5 h-5">
+      <div className='relative w-5 h-5'>
         <Sun
           className={cn(
             'absolute inset-0 w-5 h-5 text-amber-500',

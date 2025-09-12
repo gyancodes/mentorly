@@ -10,9 +10,9 @@ interface ChatPageProps {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { sessionId } = await params
   return (
-    <div className="h-screen flex flex-col">
+    <div className='h-screen flex flex-col'>
       <Header />
-      <div className="flex-1">
+      <div className='flex-1'>
         <ChatInterface sessionId={sessionId} />
       </div>
     </div>

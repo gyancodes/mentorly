@@ -1,9 +1,9 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSession, type Session } from '../../lib/auth-client'
+import { createContext, useContext, useEffect, useState } from 'react'
 
+import { useSession, type Session } from '../../lib/auth-client'
 
 interface SessionContextType {
   session: Session | null
@@ -21,7 +21,6 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = useSession()
   const [isLoading, setIsLoading] = useState(true)
 
-
   useEffect(() => {
     setIsLoading(isPending)
   }, [isPending])
@@ -33,9 +32,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SessionContext.Provider value={value}>
-      {children}
-    </SessionContext.Provider>
+    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
   )
 }
 
@@ -60,8 +57,8 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className='min-h-screen flex items-center justify-center'>
+        <div className='animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600' />
       </div>
     )
   }
