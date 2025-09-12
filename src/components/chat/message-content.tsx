@@ -91,7 +91,12 @@ export function MessageContent({ content, role }: MessageContentProps) {
             const getTextContent = (node: React.ReactNode): string => {
               if (typeof node === 'string') return node;
               if (Array.isArray(node)) return node.map(getTextContent).join('');
-              if (node?.props?.children) return getTextContent(node.props.children);
+              if (node && typeof node === 'object' && 'props' in node) {
+                const element = node as any;
+                if (element.props?.children) {
+                  return getTextContent(element.props.children);
+                }
+              }
               return '';
             };
             
