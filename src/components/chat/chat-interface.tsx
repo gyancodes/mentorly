@@ -2,14 +2,19 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { trpc } from '../../lib/trpc-client'
 import { ChatMessage } from './chat-message'
 import { ChatInput } from './chat-input'
 import { ChatSessionList } from './chat-session-list'
 import { TypingIndicator } from './typing-indicator'
 import { ThemeToggle } from '../ui/theme-toggle'
+import { useSessionContext } from '../providers/session-provider'
+import { signOut } from '@/lib/auth-client'
+import { toast } from 'sonner'
 import { cn } from '../../lib/utils'
 import { MessageRole } from '@prisma/client'
+import { LogOut } from 'lucide-react'
 
 interface PendingMessage {
   id: string
@@ -19,20 +24,33 @@ interface PendingMessage {
   status: 'sending' | 'sent' | 'error'
 }
 
+interface AnonymousMessage {
+  id: string
+  content: string
+  role: MessageRole
+  createdAt: Date
+}
+
 export function ChatInterface() {
+  const router = useRouter()
+  const { session: userSession } = useSessionContext()
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([])
   const [isAiResponding, setIsAiResponding] = useState(false)
   const [latestAiMessageId, setLatestAiMessageId] = useState<string | null>(null)
+  const [anonymousMessages, setAnonymousMessages] = useState<AnonymousMessage[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const { data: session, refetch: refetchSession } = trpc.chat.getSession.useQuery(
     { sessionId: selectedSessionId! },
-    { enabled: !!selectedSessionId }
+    { enabled: !!selectedSessionId && !!userSession }
   )
 
-  const { refetch: refetchSessions } = trpc.chat.getSessions.useQuery({})
+  const { refetch: refetchSessions } = trpc.chat.getSessions.useQuery(
+    {},
+    { enabled: !!userSession }
+  )
 
   const sendMessageMutation = trpc.chat.sendMessage.useMutation({
     onSuccess: () => {
@@ -62,6 +80,43 @@ export function ChatInterface() {
       )
       setIsAiResponding(false)
       console.error('Failed to send message:', error)
+    },
+  })
+
+  const sendAnonymousMessageMutation = trpc.chat.sendAnonymousMessage.useMutation({
+    onSuccess: (data) => {
+      // Add both user and AI messages to anonymous conversation
+      setAnonymousMessages(prev => [
+        ...prev,
+        {
+          id: data.userMessage.id,
+          content: data.userMessage.content,
+          role: data.userMessage.role,
+          createdAt: data.userMessage.createdAt,
+        },
+        {
+          id: data.assistantMessage.id,
+          content: data.assistantMessage.content,
+          role: data.assistantMessage.role,
+          createdAt: data.assistantMessage.createdAt,
+        },
+      ])
+      
+      // Clear pending messages and set typing effect
+      setPendingMessages([])
+      setIsAiResponding(false)
+      setLatestAiMessageId(data.assistantMessage.id)
+      
+      // Clear the typing effect after a delay
+      setTimeout(() => setLatestAiMessageId(null), 5000)
+    },
+    onError: (error) => {
+      // Mark pending message as error
+      setPendingMessages(prev => 
+        prev.map(msg => ({ ...msg, status: 'error' as const }))
+      )
+      setIsAiResponding(false)
+      console.error('Failed to send anonymous message:', error)
     },
   })
 
@@ -128,8 +183,19 @@ export function ChatInterface() {
     setPendingMessages([userMessage])
     setIsAiResponding(true)
     
-    if (!selectedSessionId) {
-      // Create a new session if none is selected
+    if (!userSession) {
+      // Anonymous user - use in-memory conversation
+      const conversationHistory = anonymousMessages.map(msg => ({
+        role: msg.role.toLowerCase() as 'user' | 'assistant',
+        content: msg.content,
+      }))
+      
+      sendAnonymousMessageMutation.mutate({
+        content,
+        conversationHistory,
+      })
+    } else if (!selectedSessionId) {
+      // Authenticated user - create a new session
       createSessionMutation.mutate(
         {
           title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
@@ -148,7 +214,7 @@ export function ChatInterface() {
         }
       )
     } else {
-      // Update message status to sent
+      // Authenticated user - use existing session
       setPendingMessages(prev => 
         prev.map(msg => msg.id === messageId ? { ...msg, status: 'sent' as const } : msg)
       )
@@ -164,6 +230,21 @@ export function ChatInterface() {
     // Clear any pending messages when starting a new session
     setPendingMessages([])
     setIsAiResponding(false)
+    
+    // For anonymous users, also clear the conversation history
+    if (!userSession) {
+      setAnonymousMessages([])
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      toast.success('Logged out successfully')
+      router.push('/')
+    } catch (error) {
+      toast.error('Failed to logout')
+    }
   }
 
   return (
@@ -210,16 +291,77 @@ export function ChatInterface() {
             </Link>
           </div>
 
-          {/* Chat Sessions */}
+          {/* Chat Sessions - Only show for authenticated users */}
           <div className="flex-1 overflow-y-auto">
-            {isSidebarOpen && (
+            {isSidebarOpen && userSession && (
               <ChatSessionList
                 selectedSessionId={selectedSessionId || undefined}
                 onSelectSession={setSelectedSessionId}
                 onNewSession={handleNewSession}
               />
             )}
+            {/* Anonymous user message */}
+            {isSidebarOpen && !userSession && (
+              <div className="p-4 text-center">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.959 8.959 0 01-4.906-1.471L3 21l2.471-5.094A8.959 8.959 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">Anonymous Mode</h3>
+                  <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">Your conversations are not saved. Sign in to access chat history and save your sessions.</p>
+                  <button
+                    onClick={() => router.push('/')}
+                    className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Bottom Section with Logout */}
+          {isSidebarOpen && (
+            <div className="border-t border-gray-200 dark:border-gray-800 p-3">
+              {userSession ? (
+                <div className="space-y-3">
+                  {/* User Info */}
+                  <div className="flex items-center space-x-3 px-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-sm font-medium">
+                        {(userSession.user.name || userSession.user.email || 'U').charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        {userSession.user.name || 'User'}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {userSession.user.email}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="px-2">
+                  <span className="inline-block px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium">
+                    Anonymous Mode
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -257,7 +399,7 @@ export function ChatInterface() {
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-950 dark:to-gray-900">
-          {!selectedSessionId ? (
+          {(!selectedSessionId && !userSession && anonymousMessages.length === 0) ? (
             <div className="flex items-center justify-center h-full animate-fadeIn">
               <div className="text-center max-w-xl">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg animate-breathing animate-warm-glow">
@@ -310,29 +452,56 @@ export function ChatInterface() {
           ) : (
             <div className="space-y-4 animate-fadeIn">
               {/* Render server messages */}
-              {session?.messages.map((message, index) => {
-                const isLatestAiMessage = message.role === MessageRole.ASSISTANT && message.id === latestAiMessageId
-                return (
-                  <div key={message.id} className="animate-slideIn" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <ChatMessage
-                      content={message.content}
-                      role={message.role}
-                      timestamp={new Date(message.createdAt)}
-                      enableTyping={isLatestAiMessage}
-                      typingSpeed={25}
-                    />
-                  </div>
-                )
-              })}
+              {/* Render messages based on authentication status */}
+              {userSession ? (
+                // Authenticated user - show database messages
+                session?.messages.map((message, index) => {
+                  const isLatestAiMessage = message.role === MessageRole.ASSISTANT && message.id === latestAiMessageId
+                  return (
+                    <div key={message.id} className="animate-slideIn" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <ChatMessage
+                        content={message.content}
+                        role={message.role}
+                        timestamp={new Date(message.createdAt)}
+                        enableTyping={isLatestAiMessage}
+                        typingSpeed={25}
+                      />
+                    </div>
+                  )
+                })
+              ) : (
+                // Anonymous user - show in-memory messages
+                anonymousMessages.map((message, index) => {
+                  const isLatestAiMessage = message.role === MessageRole.ASSISTANT && message.id === latestAiMessageId
+                  return (
+                    <div key={message.id} className="animate-slideIn" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <ChatMessage
+                        content={message.content}
+                        role={message.role}
+                        timestamp={message.createdAt}
+                        enableTyping={isLatestAiMessage}
+                        typingSpeed={25}
+                      />
+                    </div>
+                  )
+                })
+              )}
               
               {/* Render pending messages (optimistic updates) */}
               {pendingMessages.map((message) => {
-                // Only show pending user messages that don't already exist in server messages
-                const isDuplicate = session?.messages?.some(serverMsg => 
-                  serverMsg.content === message.content && 
-                  serverMsg.role === message.role &&
-                  Math.abs(new Date(serverMsg.createdAt).getTime() - message.timestamp.getTime()) < 5000
-                )
+                // For authenticated users, check for duplicates with server messages
+                // For anonymous users, check for duplicates with in-memory messages
+                const isDuplicate = userSession 
+                  ? session?.messages?.some(serverMsg => 
+                      serverMsg.content === message.content && 
+                      serverMsg.role === message.role &&
+                      Math.abs(new Date(serverMsg.createdAt).getTime() - message.timestamp.getTime()) < 5000
+                    )
+                  : anonymousMessages.some(anonMsg => 
+                      anonMsg.content === message.content && 
+                      anonMsg.role === message.role &&
+                      Math.abs(anonMsg.createdAt.getTime() - message.timestamp.getTime()) < 5000
+                    )
                 
                 if (isDuplicate) return null
                 

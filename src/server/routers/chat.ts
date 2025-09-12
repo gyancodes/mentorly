@@ -1,32 +1,30 @@
 import { z } from 'zod'
-import { createTRPCRouter, publicProcedure } from '../../lib/trpc'
+import { createTRPCRouter, publicProcedure, protectedProcedure } from '../../lib/trpc'
 import { generateCareerAdvice } from '../../lib/groq'
 import { MessageRole } from '@prisma/client'
 
 export const chatRouter = createTRPCRouter({
-  // Create a new chat session
-  createSession: publicProcedure
+  // Create a new chat session (only for authenticated users)
+  createSession: protectedProcedure
     .input(
       z.object({
         title: z.string().min(1),
-        userId: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const session = await ctx.db.chatSession.create({
         data: {
           title: input.title,
-          userId: input.userId,
+          userId: ctx.session.user.id,
         },
       })
       return session
     }),
 
-  // Get all chat sessions
-  getSessions: publicProcedure
+  // Get all chat sessions (only for authenticated users)
+  getSessions: protectedProcedure
     .input(
       z.object({
-        userId: z.string().optional(),
         limit: z.number().min(1).max(100).default(20),
         offset: z.number().min(0).default(0),
       })
@@ -34,7 +32,7 @@ export const chatRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const sessions = await ctx.db.chatSession.findMany({
         where: {
-          userId: input.userId,
+          userId: ctx.session.user.id,
         },
         orderBy: {
           updatedAt: 'desc',
@@ -58,8 +56,8 @@ export const chatRouter = createTRPCRouter({
       return sessions
     }),
 
-  // Get a specific chat session with messages
-  getSession: publicProcedure
+  // Get a specific chat session with messages (only for authenticated users)
+  getSession: protectedProcedure
     .input(
       z.object({
         sessionId: z.string(),
@@ -69,6 +67,7 @@ export const chatRouter = createTRPCRouter({
       const session = await ctx.db.chatSession.findUnique({
         where: {
           id: input.sessionId,
+          userId: ctx.session.user.id, // Ensure user can only access their own sessions
         },
         include: {
           messages: {
@@ -81,8 +80,8 @@ export const chatRouter = createTRPCRouter({
       return session
     }),
 
-  // Send a message and get AI response
-  sendMessage: publicProcedure
+  // Send a message and get AI response (for authenticated users with persistence)
+  sendMessage: protectedProcedure
     .input(
       z.object({
         sessionId: z.string(),
@@ -90,6 +89,18 @@ export const chatRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Verify session belongs to user
+      const sessionExists = await ctx.db.chatSession.findFirst({
+        where: {
+          id: input.sessionId,
+          userId: ctx.session.user.id,
+        },
+      })
+
+      if (!sessionExists) {
+        throw new Error('Session not found or access denied')
+      }
+
       // Save user message
       const userMessage = await ctx.db.message.create({
         data: {
@@ -143,8 +154,50 @@ export const chatRouter = createTRPCRouter({
       }
     }),
 
-  // Delete a chat session
-  deleteSession: publicProcedure
+  // Send a message and get AI response (for anonymous users without persistence)
+  sendAnonymousMessage: publicProcedure
+    .input(
+      z.object({
+        content: z.string().min(1),
+        conversationHistory: z.array(
+          z.object({
+            role: z.enum(['user', 'assistant']),
+            content: z.string(),
+          })
+        ).optional().default([]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Prepare conversation history including the new message
+      const conversationHistory = [
+        ...input.conversationHistory,
+        {
+          role: 'user' as const,
+          content: input.content,
+        },
+      ]
+
+      // Generate AI response without saving to database
+      const aiResponse = await generateCareerAdvice(conversationHistory)
+
+      return {
+        userMessage: {
+          id: `temp-user-${Date.now()}`,
+          content: input.content,
+          role: MessageRole.USER,
+          createdAt: new Date(),
+        },
+        assistantMessage: {
+          id: `temp-assistant-${Date.now()}`,
+          content: aiResponse,
+          role: MessageRole.ASSISTANT,
+          createdAt: new Date(),
+        },
+      }
+    }),
+
+  // Delete a chat session (only for authenticated users)
+  deleteSession: protectedProcedure
     .input(
       z.object({
         sessionId: z.string(),
@@ -154,6 +207,7 @@ export const chatRouter = createTRPCRouter({
       await ctx.db.chatSession.delete({
         where: {
           id: input.sessionId,
+          userId: ctx.session.user.id, // Ensure user can only delete their own sessions
         },
       })
       return { success: true }

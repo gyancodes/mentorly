@@ -3,9 +3,7 @@
 import { trpc } from '../../lib/trpc-client'
 import { cn } from '../../lib/utils'
 import { format } from 'date-fns'
-import { Trash2, User, Settings, LogOut } from 'lucide-react'
-import { useSessionContext } from '../providers/session-provider'
-import { signOut } from '../../lib/auth-client'
+import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface ChatSessionListProps {
@@ -19,8 +17,8 @@ export function ChatSessionList({
   onSelectSession,
   onNewSession,
 }: ChatSessionListProps) {
-  const { session } = useSessionContext()
   const { data: sessions, isLoading, error, refetch } = trpc.chat.getSessions.useQuery({})
+  const utils = trpc.useUtils()
   const deleteSessionMutation = trpc.chat.deleteSession.useMutation({
     onSuccess: (_, variables) => {
       toast.dismiss(`delete-${variables.sessionId}`)
@@ -35,15 +33,7 @@ export function ChatSessionList({
     },
   })
 
-  const handleLogout = async () => {
-    try {
-      await signOut()
-      toast.success('Logged out successfully')
-      window.location.href = '/login'
-    } catch (error) {
-      toast.error('Failed to logout')
-    }
-  }
+
 
 
 
@@ -60,7 +50,6 @@ export function ChatSessionList({
           // Small delay before optimistic update to ensure toast is visible
           setTimeout(() => {
             // Optimistic update - remove from UI after toast is shown
-            const utils = trpc.useUtils()
             utils.chat.getSessions.setData({}, (oldData) => {
               if (!oldData) return oldData
               return oldData.filter(session => session.id !== sessionId)
@@ -218,38 +207,7 @@ export function ChatSessionList({
         )}
       </div>
       
-      {/* Profile Section */}
-      <div className="mt-auto border-t border-gray-200 dark:border-gray-700 p-3">
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                {session?.user?.name || 'User'}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                {session?.user?.email || 'user@example.com'}
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex space-x-2">
-            <button className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md transition-colors">
-              <Settings className="w-3 h-3" />
-              <span>Settings</span>
-            </button>
-            <button 
-              onClick={handleLogout}
-              className="flex-1 flex items-center justify-center space-x-1 px-2 py-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
-            >
-              <LogOut className="w-3 h-3" />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
-      </div>
+
     </div>
   )
 }

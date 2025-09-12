@@ -63,19 +63,42 @@ export function AuthForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome to Mentorly</CardTitle>
-          <CardDescription>
-            Your AI-powered career counselor
-          </CardDescription>
+    <div className="w-full">
+      <div className="mb-8">
+        <div className="flex items-center justify-center mb-6">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
+            </svg>
+          </div>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-2">
+          Welcome Back!
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 text-center text-sm">
+          Sign in to access your dashboard and continue optimizing your career growth.
+        </p>
+      </div>
+      
+      <Card className="w-full border-0 shadow-lg">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-semibold text-center">Sign In</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+              <TabsTrigger 
+                 value="login" 
+                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm font-medium"
+               >
+                 Login
+               </TabsTrigger>
+               <TabsTrigger 
+                 value="register" 
+                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm font-medium"
+               >
+                 Register
+               </TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
@@ -112,7 +135,17 @@ export function AuthForm() {
                   </div>
                 </div>
                 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <div className="flex items-center justify-end mb-4">
+                  <button 
+                    type="button"
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    onClick={() => toast.info('Password reset feature coming soon!')}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -176,7 +209,7 @@ export function AuthForm() {
                   </div>
                 </div>
                 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -191,6 +224,21 @@ export function AuthForm() {
           </Tabs>
         </CardContent>
       </Card>
+      
+      <div className="mt-6 text-center">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Don't have an Account?{' '}
+          <button 
+             onClick={() => {
+               const registerTab = document.querySelector('[data-value="register"]') as HTMLElement;
+               registerTab?.click();
+             }}
+             className="text-blue-600 hover:text-blue-700 font-medium"
+           >
+             Sign Up
+           </button>
+        </p>
+      </div>
     </div>
   )
 }
