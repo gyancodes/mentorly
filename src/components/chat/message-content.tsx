@@ -16,12 +16,12 @@ interface MessageContentProps {
 // Define proper TypeScript interfaces for ReactMarkdown component props
 interface _CodeProps {
   inline?: boolean
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
 }
 
 interface _PreProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 interface _ReactElementWithProps {
@@ -91,15 +91,7 @@ export function MessageContent({ content, role }: MessageContentProps) {
               {children}
             </blockquote>
           ),
-          code: ({
-            inline,
-            children,
-            className,
-          }: {
-            inline?: boolean
-            children: React.ReactNode
-            className?: string
-          }) => {
+          code: ({ inline, children, className }: _CodeProps) => {
             if (inline) {
               return (
                 <code className='bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md text-sm font-mono text-red-600 dark:text-red-400 border border-gray-200 dark:border-gray-700'>
@@ -113,7 +105,7 @@ export function MessageContent({ content, role }: MessageContentProps) {
               </code>
             )
           },
-          pre: ({ children }: { children: React.ReactNode }) => {
+          pre: ({ children }: _PreProps) => {
             /**
              * Recursively extracts text content from React nodes for clipboard functionality
              * @param node - React node to extract text from
