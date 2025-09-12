@@ -1,12 +1,11 @@
 # 🚀 Mentorly - AI-Powered Career Mentorship Platform
+<img width="960" height="432" alt="image" src="https://github.com/user-attachments/assets/738909bb-87d3-48a9-b87e-3cd107646ea0" />
 
-<div align="center">
-  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Tailwind-3-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/tRPC-10-2596BE?style=for-the-badge&logo=trpc" alt="tRPC" />
-  <img src="https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
-</div>
+<img width="958" height="431" alt="image" src="https://github.com/user-attachments/assets/f86e932c-924e-4c17-9f54-df6fd0dfa973" />
+
+
+
+
 
 ## 📋 Table of Contents
 
