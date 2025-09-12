@@ -17,7 +17,7 @@ export function ChatSessionList({
   onSelectSession,
   onNewSession,
 }: ChatSessionListProps) {
-  const { data: sessions, isLoading, error, refetch } = trpc.chat.getSessions.useQuery({})
+  const { data: sessions, isLoading, refetch } = trpc.chat.getSessions.useQuery({})
   const utils = trpc.useUtils()
   const deleteSessionMutation = trpc.chat.deleteSession.useMutation({
     onSuccess: (_, variables) => {

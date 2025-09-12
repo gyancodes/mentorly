@@ -1,8 +1,6 @@
 import { initTRPC } from '@trpc/server'
 import { db } from './db'
-import { z } from 'zod'
 import { auth } from './auth'
-import { headers } from 'next/headers'
 
 // Create context for tRPC (fetch adapter)
 export const createTRPCContext = async (opts: { req?: Request; resHeaders?: Headers }) => {
@@ -15,7 +13,7 @@ export const createTRPCContext = async (opts: { req?: Request; resHeaders?: Head
         headers: opts.req.headers
       })
     }
-  } catch (error) {
+  } catch {
     // Session extraction failed, user is not authenticated
     session = null
   }

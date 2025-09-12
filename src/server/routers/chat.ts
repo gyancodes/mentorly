@@ -167,7 +167,7 @@ export const chatRouter = createTRPCRouter({
         ).optional().default([]),
       })
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       // Prepare conversation history including the new message
       const conversationHistory = [
         ...input.conversationHistory,

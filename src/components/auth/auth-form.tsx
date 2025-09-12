@@ -5,7 +5,7 @@ import { signIn, signUp } from '../../lib/auth-client'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Loader2, Mail, Lock, User } from 'lucide-react'
 import { toast } from 'sonner'
@@ -31,7 +31,7 @@ export function AuthForm() {
         toast.success('Welcome back!')
         window.location.href = '/'
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during login')
     } finally {
       setIsLoading(false)
@@ -55,7 +55,7 @@ export function AuthForm() {
         toast.success('Account created successfully!')
         window.location.href = '/'
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during registration')
     } finally {
       setIsLoading(false)
@@ -227,7 +227,7 @@ export function AuthForm() {
       
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Don't have an Account?{' '}
+          Don&apos;t have an Account?{' '}
           <button 
              onClick={() => {
                const registerTab = document.querySelector('[data-value="register"]') as HTMLElement;

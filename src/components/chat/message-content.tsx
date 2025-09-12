@@ -73,7 +73,7 @@ export function MessageContent({ content, role }: MessageContentProps) {
               {children}
             </blockquote>
           ),
-          code: ({ inline, children, className, ...props }: any) => {
+          code: ({ inline, children, className }: any) => {
             if (inline) {
               return (
                 <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md text-sm font-mono text-red-600 dark:text-red-400 border border-gray-200 dark:border-gray-700">
@@ -87,7 +87,7 @@ export function MessageContent({ content, role }: MessageContentProps) {
               </code>
             )
           },
-          pre: ({ children, ...props }: any) => {
+          pre: ({ children }: any) => {
             const getTextContent = (node: React.ReactNode): string => {
               if (typeof node === 'string') return node;
               if (Array.isArray(node)) return node.map(getTextContent).join('');

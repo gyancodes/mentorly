@@ -1,8 +1,9 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useSession, type Session } from '../../lib/auth-client'
 import { useRouter } from 'next/navigation'
+import { useSession, type Session } from '../../lib/auth-client'
+
 
 interface SessionContextType {
   session: Session | null
@@ -19,7 +20,7 @@ const SessionContext = createContext<SessionContextType>({
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = useSession()
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+
 
   useEffect(() => {
     setIsLoading(isPending)

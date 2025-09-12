@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { trpc } from '../../lib/trpc-client'
 import { ChatMessage } from './chat-message'
@@ -31,10 +31,14 @@ interface AnonymousMessage {
   createdAt: Date
 }
 
-export function ChatInterface() {
+interface ChatInterfaceProps {
+  sessionId?: string
+}
+
+export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
   const router = useRouter()
   const { session: userSession } = useSessionContext()
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(sessionId || null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([])
   const [isAiResponding, setIsAiResponding] = useState(false)
@@ -92,13 +96,13 @@ export function ChatInterface() {
           id: data.userMessage.id,
           content: data.userMessage.content,
           role: data.userMessage.role,
-          createdAt: data.userMessage.createdAt,
+          createdAt: new Date(data.userMessage.createdAt),
         },
         {
           id: data.assistantMessage.id,
           content: data.assistantMessage.content,
           role: data.assistantMessage.role,
-          createdAt: data.assistantMessage.createdAt,
+          createdAt: new Date(data.assistantMessage.createdAt),
         },
       ])
       
@@ -134,7 +138,7 @@ export function ChatInterface() {
     },
   })
 
-  const scrollToBottom = (force = false) => {
+  const scrollToBottom = useCallback((force = false) => {
     if (force || isAiResponding) {
       messagesEndRef.current?.scrollIntoView({ 
         behavior: 'smooth',
@@ -142,12 +146,12 @@ export function ChatInterface() {
         inline: 'nearest'
       })
     }
-  }
+  }, [isAiResponding])
 
   // Auto-scroll when messages change or AI is responding
   useEffect(() => {
     scrollToBottom(true)
-  }, [session?.messages])
+  }, [session?.messages, scrollToBottom])
 
   // Continuous scroll during AI response
   useEffect(() => {
@@ -158,14 +162,14 @@ export function ChatInterface() {
       
       return () => clearInterval(interval)
     }
-  }, [isAiResponding])
+  }, [isAiResponding, scrollToBottom])
 
   // Scroll when pending messages change
   useEffect(() => {
     if (pendingMessages.length > 0) {
       scrollToBottom(true)
     }
-  }, [pendingMessages])
+  }, [pendingMessages, scrollToBottom])
 
   const handleSendMessage = (content: string) => {
     // Generate unique ID for optimistic update
@@ -242,7 +246,7 @@ export function ChatInterface() {
       await signOut()
       toast.success('Logged out successfully')
       router.push('/')
-    } catch (error) {
+    } catch {
       toast.error('Failed to logout')
     }
   }

@@ -2,17 +2,18 @@ import { ChatInterface } from '../../../components/chat/chat-interface'
 import { Header } from '../../../components/layout/header'
 
 interface ChatPageProps {
-  params: {
+  params: Promise<{
     sessionId: string
-  }
+  }>
 }
 
-export default function ChatPage({ params }: ChatPageProps) {
+export default async function ChatPage({ params }: ChatPageProps) {
+  const { sessionId } = await params
   return (
     <div className="h-screen flex flex-col">
       <Header />
       <div className="flex-1">
-        <ChatInterface sessionId={params.sessionId} />
+        <ChatInterface sessionId={sessionId} />
       </div>
     </div>
   )

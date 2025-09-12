@@ -21,7 +21,7 @@ export default function LoginPage() {
               </h1>
               
               <blockquote className="text-lg xl:text-xl mb-8 opacity-90 italic">
-                "Mentorly has completely transformed my career planning process. It's reliable, efficient, and ensures my professional growth is always top-notch."
+                &ldquo;Mentorly has completely transformed my career planning process. It&apos;s reliable, efficient, and ensures my professional growth is always top-notch.&rdquo;
               </blockquote>
               
               <div className="flex items-center space-x-3">

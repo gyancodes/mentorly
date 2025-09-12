@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import { MessageRole } from '@prisma/client'
-import { cn } from '../../lib/utils'
+
 import { TypewriterEffect } from '../ui/typewriter-effect'
 import 'highlight.js/styles/github.css'
 

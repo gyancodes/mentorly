@@ -16,7 +16,7 @@ export function Header() {
       await signOut()
       toast.success('Logged out successfully')
       router.push('/')
-    } catch (error) {
+    } catch {
       toast.error('Failed to logout')
     }
   }
