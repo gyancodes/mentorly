@@ -1,7 +1,8 @@
 # 🚀 Mentorly - AI-Powered Career Mentorship Platform
-<img width="960" height="432" alt="image" src="https://github.com/user-attachments/assets/738909bb-87d3-48a9-b87e-3cd107646ea0" />
 
-<img width="958" height="431" alt="image" src="https://github.com/user-attachments/assets/f86e932c-924e-4c17-9f54-df6fd0dfa973" />
+<img width="960" height="432" alt="image" src="https://github.com/user-attachments/assets/88315bc8-e43d-489e-98eb-cf568a1c6145" />
+
+<img width="960" height="432" alt="image" src="https://github.com/user-attachments/assets/6fd91671-1d0b-4d94-9d51-315e96a6d9b8" />
 
 
 
