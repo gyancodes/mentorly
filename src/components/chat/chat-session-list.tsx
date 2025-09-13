@@ -21,7 +21,6 @@ export function ChatSessionList({
   const {
     data: sessions,
     isLoading,
-    refetch,
   } = trpc.chat.getSessions.useQuery({})
   const utils = trpc.useUtils()
   const deleteSessionMutation = trpc.chat.deleteSession.useMutation({

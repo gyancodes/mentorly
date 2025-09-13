@@ -1,7 +1,8 @@
-import { z } from 'zod'
-import { createTRPCRouter, publicProcedure, protectedProcedure } from '../../lib/trpc'
-import { generateCareerAdvice } from '../../lib/groq'
 import { MessageRole } from '@prisma/client'
+import { z } from 'zod'
+
+import { generateCareerAdvice } from '../../lib/groq'
+import { createTRPCRouter, publicProcedure, protectedProcedure } from '../../lib/trpc'
 
 export const chatRouter = createTRPCRouter({
   // Create a new chat session (only for authenticated users)

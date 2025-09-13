@@ -17,7 +17,6 @@ import { ThemeToggle } from '../ui/theme-toggle'
 import { ChatInput } from './chat-input'
 import { ChatMessage } from './chat-message'
 import { ChatSessionList } from './chat-session-list'
-import { TypingIndicator } from './typing-indicator'
 
 // Types
 interface PendingMessage {
@@ -56,7 +55,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
   >([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const { data: session, refetch: refetchSession } =
+  const { data: session } =
     trpc.chat.getSession.useQuery(
       { sessionId: selectedSessionId! },
       { 
@@ -93,7 +92,9 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
         utils.chat.getSession.setData(
           { sessionId: selectedSessionId },
           (oldData) => {
-            if (!oldData) return oldData
+            if (!oldData) {
+              return oldData
+            }
             return {
               ...oldData,
               messages: [
@@ -153,20 +154,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
       },
     })
 
-  const createSessionMutation = trpc.chat.createSession.useMutation({
-    onSuccess: newSession => {
-      setSelectedSessionId(newSession.id)
-      // Use optimistic updates instead of refetching
-      utils.chat.getSessions.setData({}, (oldData) => {
-        if (!oldData) return [newSession]
-        return [newSession, ...oldData]
-      })
-    },
-    onError: error => {
-      console.error('Failed to create session:', error)
-      toast.error('Failed to create new session. Please try again.')
-    },
-  })
+
 
   const createSessionWithFirstMessageMutation = trpc.chat.createSessionWithFirstMessage.useMutation({
     onSuccess: (data) => {
@@ -182,8 +170,15 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
       
       // Use optimistic updates instead of invalidating
       utils.chat.getSessions.setData({}, (oldData) => {
-        if (!oldData) return [data.session]
-        return [data.session, ...oldData]
+        const sessionWithRequiredFields = {
+          ...data.session,
+          messages: [data.userMessage],
+          _count: { messages: 2 }
+        }
+        if (!oldData) {
+          return [sessionWithRequiredFields]
+        }
+        return [sessionWithRequiredFields, ...oldData]
       })
       
       utils.chat.getSession.setData(
@@ -235,7 +230,9 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
   }, [isAiResponding, scrollToBottom])
 
   const handleSendMessage = (content: string) => {
-    if (!content.trim()) return
+    if (!content.trim()) {
+      return
+    }
     const messageId = `temp-${Date.now()}-${Math.random()}`
     setIsAiResponding(true)
     
@@ -275,7 +272,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
         {
           id: messageId,
           content: content.trim(),
-          role: 'user' as const,
+          role: MessageRole.USER,
           status: 'sending' as const,
           timestamp: new Date(),
         },
@@ -295,7 +292,6 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
       sendMessageMutation.mutate({
         sessionId: selectedSessionId,
         content: content.trim(),
-        messageId,
       })
     }
   }
@@ -693,7 +689,9 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
                               ) < 5000
                           )
 
-                      if (isDuplicate) return null
+                      if (isDuplicate) {
+                        return null
+                      }
 
                       return (
                         <div key={message.id} className='animate-slideIn'>
@@ -720,9 +718,9 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
                             <div className='bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3 max-w-xs'>
                               <div className='flex items-center space-x-1'>
                                 <div className='flex space-x-1'>
-                                  <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '0ms'}}></div>
-                                  <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '150ms'}}></div>
-                                  <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '300ms'}}></div>
+                                  <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '0ms'}} />
+                              <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '150ms'}} />
+                              <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '300ms'}} />
                                 </div>
                               </div>
                             </div>

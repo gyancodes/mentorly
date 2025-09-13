@@ -104,7 +104,7 @@ function extractUserContext(
  * // Returns: ["What's your current professional situation?", ...]
  * ```
  */
-function generateFollowUpQuestions(context: ConversationContext): string[] {
+function _generateFollowUpQuestions(context: ConversationContext): string[] {
   const questions: string[] = []
 
   switch (context.conversationStage) {
@@ -153,7 +153,7 @@ function generateFollowUpQuestions(context: ConversationContext): string[] {
  * // Returns structured guidance for planning stage responses
  * ```
  */
-function buildStructuredResponse(context: ConversationContext): string {
+function _buildStructuredResponse(_context: ConversationContext): string {
   // Return empty string to remove rigid structure requirements
   // Let the AI respond naturally based on the conversation context
   return ''

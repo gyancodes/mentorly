@@ -1,6 +1,5 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
-import { google } from '@better-auth/google'
 
 import { db } from './db'
 
