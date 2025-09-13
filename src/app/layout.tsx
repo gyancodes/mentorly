@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono, Orbitron } from 'next/font/google'
 
 import './globals.css'
 import { SessionProvider } from '../components/providers/session-provider'
@@ -19,6 +19,12 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
+const orbitron = Orbitron({
+  variable: '--font-orbitron',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'Mentorly - AI Career Counselor',
   description:
@@ -33,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang='en'
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${orbitron.variable}`}
       suppressHydrationWarning
     >
       <body

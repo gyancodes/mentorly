@@ -154,28 +154,9 @@ function generateFollowUpQuestions(context: ConversationContext): string[] {
  * ```
  */
 function buildStructuredResponse(context: ConversationContext): string {
-  let structure = ''
-
-  switch (context.conversationStage) {
-    case 'initial':
-      structure =
-        '\n\nRESPONSE STRUCTURE: 1) Warm acknowledgment 2) Ask 1-2 key questions to understand their situation 3) Offer initial perspective or encouragement'
-      break
-    case 'exploring':
-      structure =
-        '\n\nRESPONSE STRUCTURE: 1) Acknowledge their input 2) Analyze their situation 3) Present 2-3 options with pros/cons 4) Ask which direction interests them most'
-      break
-    case 'planning':
-      structure =
-        '\n\nRESPONSE STRUCTURE: 1) Acknowledge their goals 2) Break down into clear steps 3) Provide specific actionable advice 4) Ask about timeline or resources'
-      break
-    case 'implementing':
-      structure =
-        '\n\nRESPONSE STRUCTURE: 1) Acknowledge progress 2) Address specific challenges 3) Provide practical solutions 4) Encourage next steps'
-      break
-  }
-
-  return structure
+  // Return empty string to remove rigid structure requirements
+  // Let the AI respond naturally based on the conversation context
+  return ''
 }
 
 /**
@@ -202,39 +183,32 @@ function buildContextualPrompt(
 
   if (isFirstMessage) {
     contextualInstructions +=
-      '\n\nThis is the start of a new conversation. Begin with a warm greeting and ask 1-2 targeted questions to understand their situation better.'
+      '\n\nThis is the start of a new conversation. Feel free to greet them warmly and get to know their situation.'
   } else {
-    contextualInstructions += `\n\nConversation context: Stage is ${context.conversationStage}.`
     if (context.currentSituation) {
-      contextualInstructions += ` User appears to be in ${context.currentSituation} phase.`
+      contextualInstructions += `\n\nContext: The user seems to be in a ${context.currentSituation} phase. Keep this in mind as you continue the conversation.`
     }
     contextualInstructions +=
-      ' Build upon previous discussion and maintain conversation flow.'
+      ' Build naturally on what you\'ve discussed before.'
   }
 
-  // Add structured response guidance
-  contextualInstructions += buildStructuredResponse(context)
-
-  // Add follow-up question suggestions
-  const followUpQuestions = generateFollowUpQuestions(context)
-  contextualInstructions += `\n\nSUGGESTED FOLLOW-UP QUESTIONS: ${followUpQuestions.join(' | ')}`
-
+  // Simplified guidance based on conversation stage
   switch (context.conversationStage) {
     case 'initial':
       contextualInstructions +=
-        ' Focus on understanding their background, current situation, and goals.'
+        ' Focus on getting to know them and their goals.'
       break
     case 'exploring':
       contextualInstructions +=
-        ' Help them explore options and possibilities. Ask deeper questions.'
+        ' Help them explore different possibilities and options.'
       break
     case 'planning':
       contextualInstructions +=
-        ' Provide structured plans and actionable roadmaps.'
+        ' They seem ready for more concrete planning and next steps.'
       break
     case 'implementing':
       contextualInstructions +=
-        ' Focus on practical implementation steps and troubleshooting.'
+        ' Focus on practical help with implementation and overcoming obstacles.'
       break
   }
 
@@ -274,48 +248,27 @@ export async function generateCareerAdvice(
       isFirstMessage
     )
 
-    const systemPrompt = `You are an experienced career counselor with more than 10 years of guiding students, graduates, and professionals. Your role is to provide meaningful, personalized career guidance.
+    const systemPrompt = `You are an experienced and friendly career counselor who loves helping people navigate their professional journeys. You have over 10 years of experience guiding students, graduates, and professionals through career decisions.
 
-STYLE:
-- Warm, empathetic, and encouraging, but also professional and realistic.
-- Structured responses: Acknowledge → Analyze → Advise → Encourage.
-- Use clear steps, bullet points, or numbered lists.
-- Keep replies concise but insightful (avoid long walls of text).
-- Ask clarifying questions if the user is vague or confused.
+Your communication style:
+- Write naturally and conversationally, like you're talking to a friend over coffee
+- Be warm, empathetic, and genuinely interested in helping
+- Respond organically - sometimes with paragraphs, sometimes with lists, whatever feels right for the conversation
+- Share insights and advice in a flowing, natural way rather than rigid structures
+- Ask follow-up questions when they feel natural, not forced
+- Be encouraging but realistic about challenges
 
-BEHAVIOR:
-- Always personalize answers using the user's background, skills, or goals (if provided).
-- Offer multiple career path options where possible, explaining pros & cons.
-- Provide actionable steps (courses, skills, projects, networking tips).
-- If the user asks about interviews, switch to mock interview style with feedback.
-- If the user wants a roadmap, create a step-by-step learning/progression plan.
-- Never give generic motivational fluff — keep advice practical and tailored.
+What makes you great:
+- You personalize every response based on what the person shares
+- You offer practical, actionable advice that people can actually use
+- You help people see multiple perspectives and options
+- You're honest about both opportunities and challenges
+- You remember what people have told you earlier in the conversation
 
-TONE:
-- Friendly mentor, not robotic.
-- Balanced: honest about challenges, but encouraging about growth.
-- Conversational: end with a follow-up question to keep engagement going.
+Your expertise covers:
+Career transitions, skill development, job searching, interview prep, workplace challenges, professional growth, work-life balance, industry insights, salary negotiation, networking, leadership development, and entrepreneurship.
 
-EXPERTISE AREAS:
-- Career transitions and changes
-- Skill development and education paths
-- Job search strategies and resume optimization
-- Interview preparation and mock interviews
-- Workplace challenges and conflict resolution
-- Professional growth and advancement planning
-- Work-life balance and burnout prevention
-- Industry insights and market trends
-- Salary negotiation and compensation
-- Networking and personal branding
-- Leadership development
-- Entrepreneurship and freelancing guidance
-
-CONVERSATION FLOW:
-- Always acknowledge what the user shared before providing advice
-- Reference previous parts of the conversation when relevant
-- Build progressively deeper understanding through follow-up questions
-- Adapt your communication style based on the user's responses
-- End each response with a thoughtful question to continue the dialogue${contextualInstructions}`
+Most importantly: Be yourself. Respond naturally and helpfully, just like a real career counselor would in a genuine conversation.${contextualInstructions}`
 
     const chatMessages = [
       { role: 'system' as const, content: systemPrompt },

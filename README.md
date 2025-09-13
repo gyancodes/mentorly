@@ -132,6 +132,10 @@ DATABASE_URL="postgresql://username:password@localhost:5432/mentorly"
 BETTER_AUTH_SECRET="your-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000"
 
+# Google OAuth (Optional - for Google Sign-In)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
 # AI Integration
 GROQ_API_KEY="your-groq-api-key"
 
@@ -147,6 +151,20 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 3. Navigate to API Keys section
 4. Create a new API key
 5. Copy the key to your `.env.local` file
+
+#### Google OAuth Setup (Optional)
+For Google Sign-In functionality, you'll need to set up Google OAuth credentials:
+
+1. **Quick Setup**: Follow our detailed [Google OAuth Setup Guide](./GOOGLE_OAUTH_SETUP.md)
+2. **Manual Setup**: 
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing one
+   - Enable Google+ API
+   - Create OAuth 2.0 credentials
+   - Add `http://localhost:3000/api/auth/callback/google` as redirect URI
+   - Copy Client ID and Client Secret to your `.env.local`
+
+> **Note**: Google OAuth is optional. Users can still register and login with email/password without Google OAuth setup.
 
 ## 🗄️ Database Setup
 

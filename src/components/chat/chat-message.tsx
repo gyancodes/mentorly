@@ -2,6 +2,7 @@
 
 import { MessageRole } from '@prisma/client'
 import { format } from 'date-fns'
+import { Bot } from 'lucide-react'
 
 import { cn } from '../../lib/utils'
 
@@ -48,7 +49,7 @@ export function ChatMessage({
             'flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center shadow-sm',
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white'
-              : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-200'
+              : 'bg-blue-600 text-white'
           )}
         >
           {isUser ? (
@@ -60,24 +61,22 @@ export function ChatMessage({
               />
             </svg>
           ) : (
-            <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
-              <path d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-            </svg>
+            <Bot className='w-4 h-4' />
           )}
         </div>
 
         {/* Message Content */}
         <div
           className={cn(
-            'rounded-xl px-3 py-2.5 shadow-sm backdrop-blur-sm border transition-all duration-200 min-w-0 break-words overflow-wrap-anywhere',
+            'rounded-xl px-3 py-2.5 shadow-sm backdrop-blur-sm border transition-all duration-300 min-w-0 break-words overflow-wrap-anywhere',
             isUser ? 'max-w-fit' : 'flex-1',
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-400/20 shadow-blue-500/20'
               : 'bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 border-gray-200/50 dark:border-gray-600/50 shadow-gray-500/10',
             isError &&
-              'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300',
-            isSending && 'opacity-70 scale-95',
-            'group-hover:shadow-lg group-hover:scale-[1.02]'
+              'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 animate-pulse',
+            isSending && 'opacity-75 scale-[0.98] ring-2 ring-blue-200 dark:ring-blue-800 ring-opacity-50',
+            ''
           )}
         >
           {enableTyping && role === MessageRole.ASSISTANT ? (
@@ -101,19 +100,22 @@ export function ChatMessage({
             <span className='font-medium'>{format(timestamp, 'HH:mm')}</span>
 
             {status === 'sending' && (
-              <div className='flex space-x-1'>
-                <div
-                  className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
-                  style={{ animationDelay: '0ms' }}
-                />
-                <div
-                  className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
-                  style={{ animationDelay: '150ms' }}
-                />
-                <div
-                  className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
-                  style={{ animationDelay: '300ms' }}
-                />
+              <div className='flex items-center space-x-2'>
+                <div className='flex space-x-1'>
+                  <div
+                    className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
+                    style={{ animationDelay: '0ms', animationDuration: '1.2s' }}
+                  />
+                  <div
+                    className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
+                    style={{ animationDelay: '150ms', animationDuration: '1.2s' }}
+                  />
+                  <div
+                    className='w-1.5 h-1.5 bg-current rounded-full animate-bounce'
+                    style={{ animationDelay: '300ms', animationDuration: '1.2s' }}
+                  />
+                </div>
+                <span className='text-xs opacity-75 animate-pulse'>Sending...</span>
               </div>
             )}
 

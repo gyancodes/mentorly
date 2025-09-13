@@ -28,23 +28,26 @@ export function ChatSessionList({
     onSuccess: (_, variables) => {
       toast.dismiss(`delete-${variables.sessionId}`)
       toast.success('Chat deleted successfully')
-      refetch()
+      utils.chat.getSessions.invalidate()
     },
     onError: (error, variables) => {
       toast.dismiss(`delete-${variables.sessionId}`)
       toast.error('Failed to delete chat')
       console.error('Delete session error:', error)
-      refetch() // Refresh to restore the session in case of optimistic update
+      utils.chat.getSessions.invalidate() // Refresh to restore the session in case of optimistic update
     },
   })
 
   const handleDeleteSession = (sessionId: string, e: React.MouseEvent) => {
     e.stopPropagation() // Prevent session selection when clicking delete
 
-    toast('Are you sure you want to delete this chat session?', {
+    const toastId = toast('Are you sure you want to delete this chat session?', {
+      duration: 2000, // Auto-hide after 5 seconds
+      dismissible: true, // Allow manual dismissal
       action: {
         label: 'Delete',
         onClick: () => {
+          toast.dismiss(toastId) // Dismiss the confirmation toast
           // Show immediate feedback first
           toast.loading('Deleting chat...', { id: `delete-${sessionId}` })
 
@@ -62,9 +65,20 @@ export function ChatSessionList({
       },
       cancel: {
         label: 'Cancel',
-        onClick: () => {},
+        onClick: () => {
+          toast.dismiss(toastId) // Dismiss the confirmation toast when cancelled
+        },
+      },
+      actionButtonStyle: {
+        backgroundColor: '#dc2626', // Red background
+        color: 'white',
       },
     })
+
+    // Auto-dismiss after duration even with action buttons
+    setTimeout(() => {
+      toast.dismiss(toastId)
+    }, 5000)
   }
 
   if (isLoading) {
