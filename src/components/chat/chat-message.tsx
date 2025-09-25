@@ -33,23 +33,23 @@ export function ChatMessage({
   return (
     <div
       className={cn(
-        'flex w-full group animate-in fade-in-0 slide-in-from-bottom-2 duration-500',
+        'flex w-full group animate-message-slide-in',
         isUser ? 'justify-end' : 'justify-start'
       )}
     >
       <div
         className={cn(
-          'flex items-start space-x-3 max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] xl:max-w-[65%] w-full',
-          isUser && 'flex-row-reverse space-x-reverse'
+          'flex items-start space-x-4 w-full',
+          isUser ? 'max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] xl:max-w-[65%] flex-row-reverse space-x-reverse' : 'max-w-none'
         )}
       >
         {/* Avatar */}
         <div
           className={cn(
-            'flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center shadow-sm',
+            'flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center shadow-lg',
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white'
-              : 'bg-blue-600 text-white'
+              : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white'
           )}
         >
           {isUser ? (
@@ -68,14 +68,14 @@ export function ChatMessage({
         {/* Message Content */}
         <div
           className={cn(
-            'rounded-xl px-3 py-2.5 shadow-sm backdrop-blur-sm border transition-all duration-300 min-w-0 break-words overflow-wrap-anywhere',
-            isUser ? 'max-w-fit' : 'flex-1',
+            'transition-all duration-300 min-w-0 break-words overflow-wrap-anywhere',
+            isUser ? 'max-w-fit' : 'flex-1 w-full',
             isUser
-              ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-400/20 shadow-blue-500/20'
-              : 'bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 border-gray-200/50 dark:border-gray-600/50 shadow-gray-500/10',
+              ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl px-4 py-3 shadow-sm'
+              : 'text-gray-900 dark:text-gray-100 pr-4',
             isError &&
-              'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 animate-pulse',
-            isSending && 'opacity-75 scale-[0.98] ring-2 ring-blue-200 dark:ring-blue-800 ring-opacity-50',
+              'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-2xl px-4 py-3 animate-pulse',
+            isSending && 'opacity-75 scale-[0.98]',
             ''
           )}
         >
@@ -93,7 +93,7 @@ export function ChatMessage({
           {/* Timestamp and Status */}
           <div
             className={cn(
-              'text-xs mt-1.5 flex items-center gap-2 opacity-70',
+              'text-xs mt-1 flex items-center gap-2 opacity-60',
               isUser ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
             )}
           >

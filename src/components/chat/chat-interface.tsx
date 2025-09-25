@@ -317,7 +317,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
   }
 
   return (
-    <div className='flex h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300 relative overflow-hidden'>
+    <div className='flex h-screen bg-white dark:bg-black transition-colors duration-300 relative overflow-hidden'>
       <div
         className={cn(
           'flex w-full transition-all duration-300',
@@ -327,7 +327,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
         {/* Mobile Sidebar Overlay */}
         {isSidebarOpen && (
           <div
-            className='fixed inset-0 backdrop-blur-sm bg-white/10 z-40 sm:hidden'
+            className='fixed inset-0 backdrop-blur-sm bg-black/20 z-40 sm:hidden'
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -335,37 +335,37 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
         {/* Sidebar */}
         <div
           className={cn(
-            'bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out',
+            'bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out',
             isSidebarOpen ? 'w-64 sm:w-64' : 'w-0 overflow-hidden',
             'fixed sm:relative z-50 sm:z-auto h-full'
           )}
         >
           <div className='h-full flex flex-col'>
             {/* Sidebar Header */}
-            <div className='p-4 border-b border-gray-200 dark:border-gray-800'>
+            <div className='p-6 border-b border-gray-200 dark:border-gray-800'>
               {/* Mentorly Logo */}
               {userSession ? (
-                <div className='flex items-center gap-3 mb-4'>
-                  <div className='w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg'>
-                    <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <div className='flex items-center gap-4 mb-6'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg animate-glow'>
+                    <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
                     </svg>
                   </div>
                   <div>
-                    <h2 className='text-lg font-bold text-gray-900 dark:text-white'>Mentorly</h2>
-                    <p className='text-xs text-gray-500 dark:text-gray-400'>AI Career Mentor</p>
+                    <h2 className='text-xl font-bold text-gradient-blue'>Mentorly</h2>
+                    <p className='text-sm text-gray-500 dark:text-gray-400'>AI Career Mentor</p>
                   </div>
                 </div>
               ) : (
-                <Link href='/' className='flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity'>
-                  <div className='w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg'>
-                    <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <Link href='/' className='flex items-center gap-4 mb-6 hover:opacity-80 transition-opacity group'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200'>
+                    <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
                     </svg>
                   </div>
                   <div>
-                    <h2 className='text-lg font-bold text-gray-900 dark:text-white'>Mentorly</h2>
-                    <p className='text-xs text-gray-500 dark:text-gray-400'>AI Career Mentor</p>
+                    <h2 className='text-xl font-bold text-gradient-blue'>Mentorly</h2>
+                    <p className='text-sm text-gray-500 dark:text-gray-400'>AI Career Mentor</p>
                   </div>
                 </Link>
               )}
@@ -420,13 +420,13 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
 
             {/* Sidebar Footer */}
             {isSidebarOpen && (
-              <div className='border-t border-gray-200 dark:border-gray-800 p-4'>
+              <div className='border-t border-gray-200 dark:border-gray-800 p-6'>
                 {userSession ? (
-                  <div className='space-y-2'>
+                  <div className='space-y-3'>
                     {/* User Info */}
-                    <div className='flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer'>
-                      <div className='w-7 h-7 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0'>
-                        <span className='text-gray-700 dark:text-gray-300 text-sm font-medium'>
+                    <div className='flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer group'>
+                      <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-200'>
+                        <span className='text-white text-sm font-semibold'>
                           {(
                             userSession.user.name ||
                             userSession.user.email ||
@@ -437,41 +437,46 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
                         </span>
                       </div>
                       <div className='flex-1 min-w-0'>
-                        <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
+                        <p className='text-sm font-semibold text-gray-900 dark:text-white truncate'>
                           {userSession.user.name || 'User'}
+                        </p>
+                        <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
+                          {userSession.user.email}
                         </p>
                       </div>
                       <button
                         onClick={handleLogout}
-                        className='p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors'
+                        className='p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors group-hover:scale-105'
                       >
                         <LogOut className='w-4 h-4 text-gray-500 dark:text-gray-400' />
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className='px-2'>
+                  <div className='px-3'>
                     <Link
                       href='/'
-                      className='flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors'
+                      className='flex items-center gap-3 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 group'
                     >
-                      <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1' />
-                      </svg>
-                      Sign in
+                      <div className='w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200'>
+                        <svg className='w-3 h-3 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1' />
+                        </svg>
+                      </div>
+                      <span className='font-medium'>Sign in</span>
                     </Link>
                   </div>
                 )}
                 
-                {/* Minimal Branding */}
-                <div className='mt-4 pt-4 border-t border-gray-200 dark:border-gray-800'>
+                {/* Enhanced Branding */}
+                <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-800'>
                   <div className='flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400'>
-                    <div className='w-4 h-4 bg-blue-600 rounded-lg flex items-center justify-center'>
-                      <svg className='w-2.5 h-2.5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <div className='w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center'>
+                      <svg className='w-3 h-3 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
                       </svg>
                     </div>
-                    <span>Mentorly</span>
+                    <span className='font-medium'>Mentorly</span>
                   </div>
                 </div>
               </div>
@@ -480,9 +485,9 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
         </div>
 
         {/* Main Chat Area */}
-        <div className='flex-1 flex flex-col bg-white dark:bg-gray-900 min-w-0'>
+        <div className='flex-1 flex flex-col bg-white dark:bg-black min-w-0'>
           {/* Header */}
-          <div className='bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between'>
+          <div className='bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-10'>
             <div className='flex items-center gap-3'>
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -518,108 +523,32 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
           </div>
 
           {/* Messages Area */}
-          <div className='flex-1 overflow-y-auto bg-white dark:bg-gray-900'>
+          <div className='flex-1 overflow-y-auto bg-white dark:bg-black'>
             <div className='h-full'>
               {(userSession ? (!selectedSessionId || session?.messages.length === 0) : (anonymousMessages.length === 0)) ? (
-                <div className='h-full flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-6'>
-
-                  <div className='mb-6'>
-                    <div className='w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4 mx-auto shadow-xl'>
-                      <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
-                      </svg>
-                    </div>
-                    <h2 className='text-2xl font-semibold text-blue-600 mb-2'>
-                      How can I help you today?
-                    </h2>
-                    <p className='text-sm text-gray-600 dark:text-gray-400'>Your AI-powered career mentor is ready to assist</p>
+                <div className='h-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto px-6'>
+                  <div className='w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-8 mx-auto shadow-2xl animate-glow'>
+                    <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
+                    </svg>
                   </div>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full max-w-xl mt-6'>
-                    <button
-                      onClick={() => handleSendMessage('Help me create a career development plan')}
-                      className='p-2 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 transition-all duration-200 text-left border border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-md'
-                    >
-                      <div className='flex items-start gap-2'>
-                        <div className='w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5'>
-                          <svg fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-                          </svg>
-                        </div>
-                        <div>
-                          <h3 className='font-medium text-gray-900 dark:text-white text-xs mb-1'>
-                            Career Planning
-                          </h3>
-                          <p className='text-gray-600 dark:text-gray-400 text-xs'>
-                            Create a personalized roadmap
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleSendMessage('What skills should I develop for my career?')}
-                      className='p-2 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg hover:from-purple-100 hover:to-pink-100 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 transition-all duration-200 text-left border border-purple-200 dark:border-purple-800 hover:border-purple-300 dark:hover:border-purple-700 shadow-sm hover:shadow-md'
-                    >
-                      <div className='flex items-start gap-2'>
-                        <div className='w-4 h-4 text-purple-600 dark:text-purple-400 mt-0.5'>
-                          <svg fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M13 10V3L4 14h7v7l9-11h-7z' />
-                          </svg>
-                        </div>
-                        <div>
-                          <h3 className='font-medium text-gray-900 dark:text-white text-xs mb-1'>
-                            Skill Development
-                          </h3>
-                          <p className='text-gray-600 dark:text-gray-400 text-xs'>
-                            Discover key skills to advance
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleSendMessage('Help me prepare for job interviews')}
-                      className='p-2 bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-lg hover:from-green-100 hover:to-teal-100 dark:hover:from-green-900/30 dark:hover:to-teal-900/30 transition-all duration-200 text-left border border-green-200 dark:border-green-800 hover:border-green-300 dark:hover:border-green-700 shadow-sm hover:shadow-md'
-                    >
-                      <div className='flex items-start gap-2'>
-                        <div className='w-4 h-4 text-green-600 dark:text-green-400 mt-0.5'>
-                          <svg fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' />
-                          </svg>
-                        </div>
-                        <div>
-                          <h3 className='font-medium text-gray-900 dark:text-white text-xs mb-1'>
-                            Interview Prep
-                          </h3>
-                          <p className='text-gray-600 dark:text-gray-400 text-xs'>
-                            Get ready for your next interview
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleSendMessage('How can I improve my professional network?')}
-                      className='p-2 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg hover:from-orange-100 hover:to-red-100 dark:hover:from-orange-900/30 dark:hover:to-red-900/30 transition-all duration-200 text-left border border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 shadow-sm hover:shadow-md'
-                    >
-                      <div className='flex items-start gap-2'>
-                        <div className='w-4 h-4 text-orange-600 dark:text-orange-400 mt-0.5'>
-                          <svg fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z' />
-                          </svg>
-                        </div>
-                        <div>
-                          <h3 className='font-medium text-gray-900 dark:text-white text-xs mb-1'>
-                            Networking
-                          </h3>
-                          <p className='text-gray-600 dark:text-gray-400 text-xs'>
-                            Build meaningful connections
-                          </p>
-                        </div>
-                      </div>
-                    </button>
+                  <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-8'>
+                    How can I help you today?
+                  </h1>
+                  
+                  {/* Input Box in Hero Section */}
+                  <div className='w-full max-w-2xl'>
+                    <ChatInput
+                      onSendMessage={handleSendMessage}
+                      disabled={isAiResponding}
+                      placeholder='Message Mentorly...'
+                      variant='hero'
+                    />
                   </div>
                 </div>
               ) : (
-                <div className='px-3 sm:px-4 md:px-6 py-2 sm:py-3'>
-                  <div className='space-y-4 animate-fadeIn'>
+                <div className='px-4 sm:px-6 md:px-8 py-4 sm:py-6'>
+                  <div className='space-y-6 animate-fadeIn max-w-4xl mx-auto'>
                     {/* Render messages based on authentication status */}
                     {userSession
                       ? // Authenticated user - show database messages
@@ -705,27 +634,22 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
                       )
                     })}
 
-                    {/* Typing bubble animation when AI is responding */}
+                    {/* Typing indicator when AI is responding */}
                     {isAiResponding && (
-                      <div className='animate-slideIn'>
-                        <div className='flex items-start gap-3 mb-4'>
-                          <div className='w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0'>
+                      <div className='animate-message-slide-in'>
+                        <div className='flex items-start gap-4'>
+                          <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg'>
                             <svg className='w-4 h-4 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                               <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' />
                             </svg>
                           </div>
                           <div className='flex-1'>
-                            <div className='bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3 max-w-xs'>
-                              <div className='flex items-center space-x-1'>
-                                <div className='flex space-x-1'>
-                                  <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '0ms'}} />
-                              <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '150ms'}} />
-                              <div className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{animationDelay: '300ms'}} />
-                                </div>
+                            <div className='flex items-center space-x-1'>
+                              <div className='flex space-x-1'>
+                                <div className='w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce' style={{animationDelay: '0ms'}} />
+                                <div className='w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce' style={{animationDelay: '150ms'}} />
+                                <div className='w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce' style={{animationDelay: '300ms'}} />
                               </div>
-                            </div>
-                            <div className='text-xs text-gray-500 dark:text-gray-400 mt-1 ml-1'>
-                              AI is thinking...
                             </div>
                           </div>
                         </div>
@@ -739,16 +663,18 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
             </div>
           </div>
 
-          {/* Input Area */}
-          <ChatInput
-            onSendMessage={handleSendMessage}
-            disabled={isAiResponding}
-            placeholder={
-              selectedSessionId
-                ? 'Ask me anything...'
-                : 'Ask about your career...'
-            }
-          />
+          {/* Input Area - Only show when there are messages */}
+          {((userSession && selectedSessionId && session?.messages.length > 0) || (!userSession && anonymousMessages.length > 0)) && (
+            <ChatInput
+              onSendMessage={handleSendMessage}
+              disabled={isAiResponding}
+              placeholder={
+                selectedSessionId
+                  ? 'Ask me anything...'
+                  : 'Ask about your career...'
+              }
+            />
+          )}
         </div>
       </div>
     </div>
