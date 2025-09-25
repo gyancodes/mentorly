@@ -1,10 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { Code, BookOpen, Trophy, Clock, Play, Star } from 'lucide-react'
 import Link from 'next/link'
-import { Code, BookOpen, Trophy, Clock, Target, Users, Palette, Zap, Play, Star } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+
+
 
 const lessons = [
   {
@@ -84,7 +84,7 @@ export default function LessonsPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
-          {stats.map((stat, index) => {
+          {stats.map((stat, _index) => {
             const IconComponent = stat.icon;
             return (
               <div key={stat.label} className="bg-gray-800 rounded-lg p-6 text-center border border-gray-700">
@@ -98,12 +98,12 @@ export default function LessonsPage() {
 
         {/* Lesson Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {lessons.map((lesson, index) => (
+          {lessons.map((lesson, _index) => (
             <motion.div
               key={lesson.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
+              transition={{ duration: 0.6, delay: 0.1 * _index }}
             >
               <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden hover:border-blue-500 transition-all duration-300 group">
                 {/* Gradient Header */}

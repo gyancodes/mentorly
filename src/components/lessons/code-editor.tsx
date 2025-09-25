@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Play, RotateCcw, Check, X, Lightbulb } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml' // for HTML
 import 'highlight.js/styles/github-dark.css'
+import { Play, RotateCcw, Check, X, Lightbulb } from 'lucide-react'
+import { useState, useEffect } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 // Register HTML language
 hljs.registerLanguage('html', xml)
@@ -193,7 +194,7 @@ export default function CodeEditor({
         {!output && (
           <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800 min-h-32 flex items-center justify-center">
             <p className="text-slate-500 dark:text-slate-400">
-              Click "Run" to see your code in action!
+              Click &quot;Run&quot; to see your code in action!
             </p>
           </div>
         )}

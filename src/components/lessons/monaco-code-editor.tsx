@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import Editor from '@monaco-editor/react'
+import Editor, { type Monaco } from '@monaco-editor/react'
 import { motion } from 'framer-motion'
 import { Play, RotateCcw, Settings, CheckCircle, Lightbulb, Copy, Download } from 'lucide-react'
+import type { editor } from 'monaco-editor'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 interface MonacoCodeEditorProps {
   lesson: {
@@ -25,27 +26,33 @@ export default function MonacoCodeEditor({
   className = ''
 }: MonacoCodeEditorProps) {
   const [value, setValue] = useState(lesson.code)
-  const [output, setOutput] = useState('')
+  const [_output, setOutput] = useState('')
   const [isValid, setIsValid] = useState(false)
   const [showHints, setShowHints] = useState(false)
   const [currentHintIndex, setCurrentHintIndex] = useState(0)
   const [theme, setTheme] = useState<'vs-dark' | 'light'>('vs-dark')
   const [fontSize, setFontSize] = useState(14)
   const [showSettings, setShowSettings] = useState(false)
-  const editorRef = useRef<any>(null)
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
+
+  const validateHTML = useCallback((htmlCode: string): boolean => {
+    const normalizedCode = htmlCode.replace(/\s+/g, ' ').trim().toLowerCase()
+    const normalizedExpected = lesson.expectedOutput.replace(/\s+/g, ' ').trim().toLowerCase()
+    return normalizedCode.includes(normalizedExpected) || normalizedCode === normalizedExpected
+  }, [lesson.expectedOutput])
 
   useEffect(() => {
     onCodeChange(value)
     const valid = validateHTML(value)
     setIsValid(valid)
     onValidation(valid)
-  }, [value, onCodeChange, onValidation])
+  }, [value, onCodeChange, onValidation, validateHTML])
 
-  const handleEditorDidMount = (editor: any, monaco: any) => {
-    editorRef.current = editor
+  const handleEditorDidMount = (editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+    editorRef.current = editorInstance
 
     // Configure Monaco Editor options
-    editor.updateOptions({
+    editorInstance.updateOptions({
       fontSize: fontSize,
       fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
       lineNumbers: 'on',
@@ -71,7 +78,15 @@ export default function MonacoCodeEditor({
     // Add custom HTML snippets and autocomplete
     if (language === 'html') {
       monaco.languages.registerCompletionItemProvider('html', {
-        provideCompletionItems: (model: any, position: any) => {
+        provideCompletionItems: (model, position) => {
+          const word = model.getWordUntilPosition(position);
+          const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn
+          };
+          
           const suggestions = [
             {
               label: 'html5',
@@ -90,21 +105,24 @@ export default function MonacoCodeEditor({
                 '</html>'
               ].join('\n'),
               insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-              documentation: 'HTML5 boilerplate'
+              documentation: 'HTML5 boilerplate',
+              range: range
             },
             {
               label: 'div',
               kind: monaco.languages.CompletionItemKind.Snippet,
               insertText: '<div>$1</div>',
               insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-              documentation: 'Div element'
+              documentation: 'Div element',
+              range: range
             },
             {
               label: 'p',
               kind: monaco.languages.CompletionItemKind.Snippet,
               insertText: '<p>$1</p>',
               insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-              documentation: 'Paragraph element'
+              documentation: 'Paragraph element',
+              range: range
             }
           ]
           return { suggestions }
@@ -123,12 +141,6 @@ export default function MonacoCodeEditor({
     onCodeChange(value)
   }
 
-  const validateHTML = (htmlCode: string): boolean => {
-    const normalizedCode = htmlCode.replace(/\s+/g, ' ').trim().toLowerCase()
-    const normalizedExpected = lesson.expectedOutput.replace(/\s+/g, ' ').trim().toLowerCase()
-    return normalizedCode.includes(normalizedExpected) || normalizedCode === normalizedExpected
-  }
-
   const resetCode = () => {
     setValue(lesson.code)
     setOutput('')
@@ -143,7 +155,10 @@ export default function MonacoCodeEditor({
 
   const formatCode = () => {
     if (editorRef.current) {
-      editorRef.current.getAction('editor.action.formatDocument').run()
+      const action = editorRef.current.getAction('editor.action.formatDocument')
+      if (action) {
+        action.run()
+      }
     }
   }
 

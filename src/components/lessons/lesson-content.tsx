@@ -1,9 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import ReactMarkdown from 'react-markdown'
-import { Card } from '@/components/ui/card'
 import { BookOpen, Clock, Target } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+
+import { Card } from '@/components/ui/card'
 import type { Lesson } from '@/lib/lessons-data'
 
 interface LessonContentProps {
@@ -124,10 +125,10 @@ export default function LessonContent({ lesson }: LessonContentProps) {
         {/* Learning Objectives */}
         <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
           <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            💡 What You'll Learn
+            💡 What You&apos;ll Learn
           </h3>
           <p className="text-blue-700 dark:text-blue-300 text-sm">
-            By the end of this lesson, you'll understand {lesson.title.toLowerCase()} and be able to implement it in your own projects.
+            By the end of this lesson, you&apos;ll understand {lesson.title.toLowerCase()} and be able to implement it in your own projects.
           </p>
         </div>
       </Card>

@@ -1,8 +1,8 @@
 'use client';
 
+import { Menu, X, BookOpen, User, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, BookOpen, User, Settings, LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,7 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -14,9 +12,15 @@ import {
   Lightbulb,
   Award
 } from 'lucide-react';
-import { Lesson, LessonTrack } from '@/lib/lessons-data';
-import MonacoCodeEditor from './monaco-code-editor';
+import { useState, useEffect } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+
+import type { Lesson, LessonTrack } from '@/lib/lessons-data';
+
+
 import Breadcrumb from '../layout/breadcrumb';
+
+import MonacoCodeEditor from './monaco-code-editor';
 
 interface ProfessionalLessonLayoutProps {
   track: LessonTrack;
@@ -32,7 +36,7 @@ export default function ProfessionalLessonLayout({
   const [activeTab, setActiveTab] = useState<'instructions' | 'preview'>('instructions');
   const [code, setCode] = useState(currentLesson?.code || '');
   const [output, setOutput] = useState('');
-  const [isValidated, setIsValidated] = useState(false);
+  const [_isValidated, setIsValidated] = useState(false);
 
   useEffect(() => {
     if (currentLesson?.code) {
@@ -51,9 +55,7 @@ export default function ProfessionalLessonLayout({
   };
 
   const runCode = () => {
-    if (currentLesson.language === 'html') {
-      setOutput(code);
-    }
+    setOutput(code);
   };
 
   const resetCode = () => {
@@ -94,7 +96,7 @@ export default function ProfessionalLessonLayout({
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <Clock className="w-4 h-4" />
-                <span>{currentLesson.duration}</span>
+                <span>{currentLesson.estimatedTime} min</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <Target className="w-4 h-4" />
@@ -300,7 +302,7 @@ export default function ProfessionalLessonLayout({
                           />
                         ) : (
                           <div className="flex items-center justify-center h-96 text-gray-500">
-                            Click "Run Code" to see your output
+                            Click &quot;Run Code&quot; to see your output
                           </div>
                         )}
                       </div>

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { lessonTracks } from '@/lib/lessons-data';
-import ProfessionalLessonLayout from '@/components/lessons/professional-lesson-layout';
-import Navbar from '@/components/layout/navbar';
+
 import Footer from '@/components/layout/footer';
+import Navbar from '@/components/layout/navbar';
+import ProfessionalLessonLayout from '@/components/lessons/professional-lesson-layout';
+import { lessonTracks } from '@/lib/lessons-data';
 
 export default function LessonTrackPage() {
   const params = useParams();
@@ -21,7 +21,7 @@ export default function LessonTrackPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Track not found</h1>
-          <p className="text-gray-600">The lesson track you're looking for doesn't exist.</p>
+          <p className="text-gray-600">The lesson track you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
@@ -32,7 +32,7 @@ export default function LessonTrackPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Lesson not found</h1>
-          <p className="text-gray-600">The lesson you're looking for doesn't exist.</p>
+          <p className="text-gray-600">The lesson you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
