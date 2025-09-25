@@ -1,8 +1,8 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 
 import { useSessionContext } from '@/components/providers/session-provider'
 
@@ -300,8 +300,8 @@ export default function Home() {
                 </div>
                 
                 {/* Decorative elements */}
-                <div className='absolute -top-4 -left-4 w-24 h-24 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-2xl opacity-60 -z-10'></div>
-                <div className='absolute -bottom-4 -right-4 w-32 h-32 bg-blue-300 dark:bg-blue-800/30 rounded-full blur-2xl opacity-60 -z-10'></div>
+                <div className='absolute -top-4 -left-4 w-24 h-24 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-2xl opacity-60 -z-10' />
+                <div className='absolute -bottom-4 -right-4 w-32 h-32 bg-blue-300 dark:bg-blue-800/30 rounded-full blur-2xl opacity-60 -z-10' />
               </motion.div>
             </motion.div>
           </div>
@@ -495,8 +495,8 @@ export default function Home() {
               viewport={{ once: true }}
               variants={fadeIn}
             >
-              <div className='inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 font-medium rounded-full mb-4'>
-                Coming Soon
+              <div className='inline-block px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-600 font-medium rounded-full mb-4'>
+                Now Available
               </div>
               <h2 className='text-3xl font-bold mb-4'>Interactive <span className='text-blue-600'>Coding Lessons</span></h2>
               <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
@@ -513,9 +513,10 @@ export default function Home() {
             >
               {/* HTML Card */}
               <motion.div 
-                className='bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-800 group'
+                className='bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-800 group cursor-pointer'
                 variants={itemFadeIn}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                onClick={() => router.push('/lessons/html-basics')}
               >
                 <div className='h-40 bg-gradient-to-r from-orange-400 to-red-500 p-6 flex items-center justify-center'>
                   <svg className='w-16 h-16 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -528,7 +529,7 @@ export default function Home() {
                     Master the building blocks of web development with interactive HTML lessons.
                   </p>
                   <div className='flex items-center text-blue-600'>
-                    <span className='text-sm font-medium'>Coming Soon</span>
+                    <span className='text-sm font-medium'>Start Learning</span>
                     <svg className='w-4 h-4 ml-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                     </svg>
@@ -627,7 +628,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className='text-gray-700 dark:text-gray-300 italic'>
-                  "Mentorly helped me identify skill gaps I didn't know I had. The personalized guidance was exactly what I needed to advance in my career."
+                  &ldquo;Mentorly helped me identify skill gaps I didn&apos;t know I had. The personalized guidance was exactly what I needed to advance in my career.&rdquo;
                 </p>
               </motion.div>
               
@@ -646,7 +647,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className='text-gray-700 dark:text-gray-300 italic'>
-                  "The 24/7 availability of AI mentorship has been a game-changer. I can get guidance whenever I need it, without scheduling constraints."
+                  &ldquo;The 24/7 availability of AI mentorship has been a game-changer. I can get guidance whenever I need it, without scheduling constraints.&rdquo;
                 </p>
               </motion.div>
               
@@ -665,7 +666,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className='text-gray-700 dark:text-gray-300 italic'>
-                  "The progress tracking features keep me motivated and focused on my goals. I can clearly see how far I've come and what's next."
+                  &ldquo;The progress tracking features keep me motivated and focused on my goals. I can clearly see how far I&apos;ve come and what&apos;s next.&rdquo;
                 </p>
               </motion.div>
             </motion.div>
