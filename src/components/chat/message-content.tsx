@@ -38,117 +38,60 @@ export function MessageContent({ content, role }: MessageContentProps) {
     return <div className='whitespace-pre-wrap'>{content}</div>
   }
 
-  // For AI messages, render with markdown support
+  // For AI messages, render with clean, smooth formatting
   return (
-    <div className='prose prose-base max-w-none dark:prose-invert leading-7 text-gray-800 dark:text-gray-100 break-words overflow-wrap-anywhere'>
+    <div className='text-gray-900 dark:text-gray-100 leading-7 break-words overflow-wrap-anywhere'>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
-          // Custom styling for markdown elements - ChatGPT-like
-          h1: ({ children }) => (
-            <h1 className='text-2xl font-bold mb-6 mt-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 first:mt-0'>
-              {children}
-            </h1>
-          ),
-          h2: ({ children }) => (
-            <h2 className='text-xl font-semibold mb-4 mt-6 text-gray-900 dark:text-white first:mt-0'>
-              {children}
-            </h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className='text-lg font-semibold mb-3 mt-5 text-gray-900 dark:text-white first:mt-0'>
-              {children}
-            </h3>
-          ),
-          h4: ({ children }) => (
-            <h4 className='text-base font-semibold mb-2 mt-4 text-gray-900 dark:text-white first:mt-0'>
-              {children}
-            </h4>
-          ),
+          // Smooth, clean styling
           p: ({ children }) => (
-            <p className='mb-4 text-gray-800 dark:text-gray-200 leading-7 text-base first:mt-0 last:mb-0'>
+            <p className='mb-3 text-gray-900 dark:text-gray-100 leading-7'>
               {children}
             </p>
           ),
           ul: ({ children }) => (
-            <ul className='list-disc mb-5 space-y-2 text-gray-800 dark:text-gray-200 ml-6 pl-2'>
+            <ul className='list-disc mb-3 space-y-1 text-gray-900 dark:text-gray-100 ml-5'>
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className='list-decimal mb-5 space-y-2 text-gray-800 dark:text-gray-200 ml-6 pl-2'>
+            <ol className='list-decimal mb-3 space-y-1 text-gray-900 dark:text-gray-100 ml-5'>
               {children}
             </ol>
           ),
           li: ({ children }) => (
-            <li className='text-gray-800 dark:text-gray-200 text-base leading-7 marker:text-gray-500 dark:marker:text-gray-400'>
+            <li className='text-gray-900 dark:text-gray-100 leading-6'>
               {children}
             </li>
           ),
-          blockquote: ({ children }) => (
-            <blockquote className='border-l-4 border-blue-500 dark:border-blue-400 pl-6 pr-4 italic mb-6 text-gray-700 dark:text-gray-300 bg-blue-50/50 dark:bg-blue-900/10 py-4 rounded-r-xl my-6'>
-              {children}
-            </blockquote>
-          ),
-          code: ({ inline, children, className }: _CodeProps) => {
+          code: ({ inline, children }: _CodeProps) => {
             if (inline) {
               return (
-                <code className='bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md text-sm font-mono text-red-600 dark:text-red-400 border border-gray-200 dark:border-gray-700'>
+                <code className='bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800 dark:text-gray-200'>
                   {children}
                 </code>
               )
             }
             return (
-              <code className={cn('block font-mono text-sm', className)}>
+              <code className='block font-mono text-sm bg-gray-100 dark:bg-gray-800 p-3 rounded-lg overflow-x-auto text-gray-800 dark:text-gray-200 mb-3'>
                 {children}
               </code>
             )
           },
-          pre: ({ children }: _PreProps) => {
-            /**
-             * Recursively extracts text content from React nodes for clipboard functionality
-             * @param node - React node to extract text from
-             * @returns Extracted text content as string
-             */
-            const getTextContent = (node: React.ReactNode): string => {
-              if (typeof node === 'string') {return node}
-              if (Array.isArray(node)) {return node.map(getTextContent).join('')}
-              if (node && typeof node === 'object' && 'props' in node) {
-                const element = node as {
-                  props?: { children?: React.ReactNode }
-                }
-                if (element.props?.children) {
-                  return getTextContent(element.props.children)
-                }
-              }
-              return ''
-            }
-
-            return (
-              <div className='relative group mb-6'>
-                <pre className='bg-gray-900 dark:bg-gray-950 text-gray-100 p-5 rounded-xl overflow-x-auto text-sm border border-gray-700 dark:border-gray-800 shadow-lg font-mono leading-6 max-w-full whitespace-pre-wrap break-all'>
-                  {children}
-                </pre>
-                <button
-                  className='absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-md text-xs font-medium'
-                  onClick={() => {
-                    const code = getTextContent(children)
-                    navigator.clipboard.writeText(code)
-                  }}
-                >
-                  Copy
-                </button>
-              </div>
-            )
-          },
+          pre: ({ children }: _PreProps) => (
+            <pre className='bg-gray-100 dark:bg-gray-800 p-3 rounded-lg overflow-x-auto text-sm font-mono text-gray-800 dark:text-gray-200 mb-3'>
+              {children}
+            </pre>
+          ),
           strong: ({ children }) => (
-            <strong className='font-semibold text-gray-900 dark:text-white'>
+            <strong className='font-semibold text-gray-900 dark:text-gray-100'>
               {children}
             </strong>
           ),
           em: ({ children }) => (
-            <em className='italic text-gray-800 dark:text-gray-200'>
+            <em className='italic text-gray-900 dark:text-gray-100'>
               {children}
             </em>
           ),
@@ -157,14 +100,41 @@ export function MessageContent({ content, role }: MessageContentProps) {
               href={href}
               target='_blank'
               rel='noopener noreferrer'
-              className='text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-1 py-0.5 rounded'
+              className='text-blue-600 dark:text-blue-400 hover:underline'
             >
               {children}
             </a>
           ),
+          // Simple headings
+          h1: ({ children }) => (
+            <h1 className='text-lg font-bold mb-3 mt-4 text-gray-900 dark:text-gray-100'>
+              {children}
+            </h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className='text-base font-semibold mb-2 mt-3 text-gray-900 dark:text-gray-100'>
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className='text-sm font-semibold mb-2 mt-2 text-gray-900 dark:text-gray-100'>
+              {children}
+            </h3>
+          ),
+          h4: ({ children }) => (
+            <h4 className='text-sm font-medium mb-1 mt-2 text-gray-900 dark:text-gray-100'>
+              {children}
+            </h4>
+          ),
+          blockquote: ({ children }) => (
+            <blockquote className='border-l-4 border-gray-300 dark:border-gray-600 pl-3 italic mb-3 text-gray-700 dark:text-gray-300'>
+              {children}
+            </blockquote>
+          ),
+          // Simple table formatting
           table: ({ children }) => (
-            <div className='overflow-x-auto mb-6 rounded-lg border border-gray-200 dark:border-gray-700'>
-              <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
+            <div className='overflow-x-auto mb-3 rounded border border-gray-200 dark:border-gray-700'>
+              <table className='min-w-full text-sm'>
                 {children}
               </table>
             </div>
@@ -173,22 +143,20 @@ export function MessageContent({ content, role }: MessageContentProps) {
             <thead className='bg-gray-50 dark:bg-gray-800'>{children}</thead>
           ),
           tbody: ({ children }) => (
-            <tbody className='bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700'>
-              {children}
-            </tbody>
+            <tbody className='bg-white dark:bg-gray-900'>{children}</tbody>
           ),
           tr: ({ children }) => (
-            <tr className='hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150'>
+            <tr className='border-b border-gray-200 dark:border-gray-700'>
               {children}
             </tr>
           ),
           th: ({ children }) => (
-            <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+            <th className='px-3 py-2 text-left font-medium text-gray-500 dark:text-gray-400'>
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100'>
+            <td className='px-3 py-2 text-gray-900 dark:text-gray-100'>
               {children}
             </td>
           ),

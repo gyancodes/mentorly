@@ -525,7 +525,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
           {/* Messages Area */}
           <div className='flex-1 overflow-y-auto bg-white dark:bg-black'>
             <div className='h-full'>
-              {(userSession ? (!selectedSessionId || session?.messages.length === 0) : (anonymousMessages.length === 0)) ? (
+              {(userSession ? (!selectedSessionId || !session?.messages || session.messages.length === 0) : (anonymousMessages.length === 0)) ? (
                 <div className='h-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto px-6'>
                   <div className='w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-8 mx-auto shadow-2xl animate-glow'>
                     <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -548,7 +548,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
                 </div>
               ) : (
                 <div className='px-4 sm:px-6 md:px-8 py-4 sm:py-6'>
-                  <div className='space-y-6 animate-fadeIn max-w-4xl mx-auto'>
+                  <div className='animate-fadeIn max-w-4xl mx-auto'>
                     {/* Render messages based on authentication status */}
                     {userSession
                       ? // Authenticated user - show database messages
@@ -664,7 +664,7 @@ export function ChatInterface({ sessionId }: ChatInterfaceProps = {}) {
           </div>
 
           {/* Input Area - Only show when there are messages */}
-          {((userSession && selectedSessionId && session?.messages.length > 0) || (!userSession && anonymousMessages.length > 0)) && (
+          {((userSession && selectedSessionId && session?.messages && session.messages.length > 0) || (!userSession && anonymousMessages.length > 0)) && (
             <ChatInput
               onSendMessage={handleSendMessage}
               disabled={isAiResponding}

@@ -33,14 +33,14 @@ export function ChatMessage({
   return (
     <div
       className={cn(
-        'flex w-full group animate-message-slide-in',
+        'flex w-full group animate-message-slide-in mb-6',
         isUser ? 'justify-end' : 'justify-start'
       )}
     >
       <div
         className={cn(
           'flex items-start space-x-4 w-full',
-          isUser ? 'max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] xl:max-w-[65%] flex-row-reverse space-x-reverse' : 'max-w-none'
+          isUser ? 'max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] xl:max-w-[65%] flex-row-reverse space-x-reverse' : 'max-w-full'
         )}
       >
         {/* Avatar */}
@@ -72,7 +72,7 @@ export function ChatMessage({
             isUser ? 'max-w-fit' : 'flex-1 w-full',
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl px-4 py-3 shadow-sm'
-              : 'text-gray-900 dark:text-gray-100 pr-4',
+              : 'text-gray-900 dark:text-gray-100',
             isError &&
               'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-2xl px-4 py-3 animate-pulse',
             isSending && 'opacity-75 scale-[0.98]',
