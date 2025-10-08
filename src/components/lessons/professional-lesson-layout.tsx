@@ -10,15 +10,20 @@ import {
   BookOpen,
   Target,
   Lightbulb,
-  Award
+  Award,
+  Maximize2,
+  Minimize2,
+  Eye,
+  Code,
+  Menu,
+  X
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import type { Lesson, LessonTrack } from '@/lib/lessons-data';
-
-
-import Breadcrumb from '../layout/breadcrumb';
 
 import MonacoCodeEditor from './monaco-code-editor';
 
@@ -33,10 +38,13 @@ export default function ProfessionalLessonLayout({
   currentLesson,
   onLessonChange
 }: ProfessionalLessonLayoutProps) {
-  const [activeTab, setActiveTab] = useState<'instructions' | 'preview'>('instructions');
+  const [activeTab, setActiveTab] = useState<'instructions' | 'preview'>('preview');
   const [code, setCode] = useState(currentLesson?.code || '');
   const [output, setOutput] = useState('');
   const [_isValidated, setIsValidated] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [previewMaximized, setPreviewMaximized] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
     if (currentLesson?.code) {
@@ -69,94 +77,86 @@ export default function ProfessionalLessonLayout({
   const prevLesson = track.lessons[currentLessonIndex - 1];
   const progressPercentage = ((currentLessonIndex + 1) / track.lessons.length) * 100;
 
-  const breadcrumbItems = [
-    { label: 'Lessons', href: '/lessons' },
-    { label: track.title, href: `/lessons/${track.id}` },
-    { label: currentLesson.title }
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto">
-          <Breadcrumb items={breadcrumbItems} />
+    <div className="h-screen bg-slate-950 flex flex-col overflow-hidden">
+      {/* Compact Header */}
+      <div className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800/50 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition-all duration-200"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">{currentLesson.title}</h1>
-                <p className="text-gray-600">{track.title}</p>
+          <div className="flex items-center space-x-3">
+            <span className="text-sm text-slate-300 font-medium">{track.title}</span>
+            <ChevronRight className="w-3 h-3 text-slate-500" />
+            <span className="text-sm text-slate-100 font-semibold">{currentLesson.title}</span>
               </div>
             </div>
             
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Clock className="w-4 h-4" />
-                <span>{currentLesson.estimatedTime} min</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Target className="w-4 h-4" />
-                <span className="capitalize">{currentLesson.difficulty}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Award className="w-4 h-4" />
-                <span>{currentLessonIndex + 1} of {track.lessons.length}</span>
-              </div>
-            </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-xs text-slate-400 bg-slate-800/40 px-2 py-1 rounded-md">
+            <Clock className="w-3 h-3" />
+            <span>{currentLesson.estimatedTime}m</span>
           </div>
 
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-              <span>Course Progress</span>
-              <span>{Math.round(progressPercentage)}% Complete</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setShowInstructions(!showInstructions)}
+              className={`p-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+                showInstructions 
+                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25' 
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <BookOpen className="w-3 h-3" />
+            </button>
+            
+            <button
+              onClick={() => setPreviewMaximized(!previewMaximized)}
+              className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition-all duration-200"
+            >
+              {previewMaximized ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex max-w-7xl mx-auto w-full">
-        {/* Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Collapsible Sidebar */}
+        {!sidebarCollapsed && (
+          <div className="w-64 bg-slate-900/95 backdrop-blur-sm border-r border-slate-800/50 flex flex-col">
           {/* Lesson Navigation */}
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+            <div className="p-4 border-b border-slate-800/50">
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
               Lessons ({track.lessons.length})
             </h3>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div className="space-y-1 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
               {track.lessons.map((lesson, index) => (
                 <button
                   key={lesson.id}
                   onClick={() => onLessonChange(lesson.id)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors border ${
+                    className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
                     lesson.id === currentLesson.id
-                      ? 'bg-blue-50 border-blue-200 text-blue-900'
-                      : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'
+                        ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/25'
+                        : 'text-slate-300 hover:bg-slate-800/60 hover:text-slate-100'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className={`text-xs font-medium px-2 py-1 rounded ${
+                        <span className={`text-xs font-medium px-2 py-1 rounded-md ${
                         lesson.id === currentLesson.id
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-600'
+                            ? 'bg-emerald-500/80 text-white'
+                            : 'bg-slate-700/60 text-slate-300'
                       }`}>
                         {index + 1}
                       </span>
-                      <span className="text-sm font-medium">{lesson.title}</span>
+                        <span className="text-xs font-medium truncate">{lesson.title}</span>
                     </div>
                     {index < currentLessonIndex && (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                        <CheckCircle className="w-3 h-3 text-emerald-400 flex-shrink-0" />
                     )}
                   </div>
                 </button>
@@ -165,54 +165,59 @@ export default function ProfessionalLessonLayout({
           </div>
 
           {/* Navigation Controls */}
-          <div className="p-6 mt-auto border-t border-gray-200">
-            <div className="flex space-x-3">
+            <div className="p-4 mt-auto border-t border-slate-800/50">
+              <div className="flex space-x-2">
               <button
                 onClick={() => prevLesson && onLessonChange(prevLesson.id)}
                 disabled={!prevLesson}
-                className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-white border border-gray-300 hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 text-gray-700 rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 bg-slate-800/60 hover:bg-slate-700/60 disabled:bg-slate-800/30 disabled:text-slate-500 text-slate-300 text-xs rounded-lg transition-all duration-200"
               >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Previous</span>
+                  <ChevronLeft className="w-3 h-3" />
+                  <span>Prev</span>
               </button>
               <button
                 onClick={() => nextLesson && onLessonChange(nextLesson.id)}
                 disabled={!nextLesson}
-                className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-800/30 disabled:text-slate-500 text-white text-xs rounded-lg transition-all duration-200 shadow-lg shadow-emerald-600/25"
               >
                 <span>Next</span>
-                <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </div>
         </div>
+        )}
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-slate-950">
           <PanelGroup direction="horizontal" className="flex-1">
             {/* Code Editor Panel */}
-            <Panel defaultSize={50} minSize={30}>
-              <div className="h-full flex flex-col bg-white">
-                {/* Editor Header */}
-                <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Code Editor</h3>
+            <Panel defaultSize={previewMaximized ? 100 : 60} minSize={30}>
+              <div className="h-full flex flex-col bg-slate-950">
+                {/* Compact Editor Header */}
+                <div className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800/50 px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
+                      <Code className="w-4 h-4 text-slate-400" />
+                      <span className="text-sm text-slate-200 font-medium">index.html</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
                       <button
                         onClick={runCode}
-                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
+                      className="flex items-center space-x-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition-all duration-200 shadow-lg shadow-emerald-600/25"
                       >
-                        <Play className="w-4 h-4" />
-                        <span>Run Code</span>
+                      <Play className="w-3 h-3" />
+                      <span>Run</span>
                       </button>
                       <button
                         onClick={resetCode}
-                        className="flex items-center space-x-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors"
+                      className="flex items-center space-x-2 px-3 py-1.5 bg-slate-800/60 hover:bg-slate-700/60 text-slate-300 text-xs font-medium rounded-lg transition-all duration-200"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                      <RotateCcw className="w-3 h-3" />
                         <span>Reset</span>
                       </button>
-                    </div>
                   </div>
                 </div>
 
@@ -229,60 +234,201 @@ export default function ProfessionalLessonLayout({
               </div>
             </Panel>
 
-            <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-gray-300 transition-colors" />
+            {!previewMaximized && (
+              <>
+                <PanelResizeHandle className="w-1 bg-slate-800/50 hover:bg-slate-700/50 transition-all duration-200" />
 
-            {/* Instructions/Preview Panel */}
-            <Panel defaultSize={50} minSize={30}>
-              <div className="h-full flex flex-col bg-white">
-                {/* Tab Header */}
-                <div className="border-b border-gray-200">
-                  <div className="flex">
+                {/* Preview Panel */}
+                <Panel defaultSize={40} minSize={20}>
+                  <div className="h-full flex flex-col bg-slate-950">
+                    {/* Compact Preview Header */}
+                    <div className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800/50 px-4 py-3 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Eye className="w-4 h-4 text-slate-400" />
+                        <span className="text-sm text-slate-200 font-medium">Preview</span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-1">
                     <button
-                      onClick={() => setActiveTab('instructions')}
-                      className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                        activeTab === 'instructions'
-                          ? 'border-blue-500 text-blue-600 bg-blue-50'
-                          : 'border-transparent text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      Instructions
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('preview')}
-                      className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                        activeTab === 'preview'
-                          ? 'border-blue-500 text-blue-600 bg-blue-50'
-                          : 'border-transparent text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      Preview
+                          onClick={() => setPreviewMaximized(true)}
+                          className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition-all duration-200"
+                        >
+                          <Maximize2 className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
 
-                {/* Tab Content */}
-                <div className="flex-1 overflow-auto">
-                  {activeTab === 'instructions' ? (
-                    <div className="p-6">
-                      <div className="prose max-w-none">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">
-                          {currentLesson.title}
-                        </h2>
-                        <div 
-                          className="text-gray-700 leading-relaxed"
-                          dangerouslySetInnerHTML={{ __html: currentLesson.content }}
+                    {/* Preview Content */}
+                    <div className="flex-1 bg-white overflow-auto">
+                      {output ? (
+                        <iframe
+                          srcDoc={output}
+                          className="w-full h-full border-0"
+                          title="Code Preview"
                         />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-slate-500">
+                          <div className="text-center">
+                            <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
+                              <Play className="w-8 h-8 text-slate-400" />
+                            </div>
+                            <p className="text-sm text-slate-400">Click "Run" to see your code</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Panel>
+              </>
+            )}
+          </PanelGroup>
+        </div>
+      </div>
+
+      {/* Floating Instructions Panel */}
+      {showInstructions && (
+        <div className="fixed inset-y-0 right-0 w-96 bg-slate-900/95 backdrop-blur-sm border-l border-slate-800/50 shadow-2xl z-50 overflow-hidden">
+          <div className="h-full flex flex-col">
+            {/* Instructions Header */}
+            <div className="bg-slate-800/80 border-b border-slate-800/50 px-4 py-4 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-slate-100">Instructions</h3>
+              <button
+                onClick={() => setShowInstructions(false)}
+                className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 rounded-lg transition-all duration-200"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Instructions Content */}
+            <div className="flex-1 overflow-auto p-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+              <div className="prose prose-sm max-w-none prose-invert">
+                <h2 className="text-lg font-bold text-slate-100 mb-4">
+                  {currentLesson.title}
+                </h2>
+                
+                {/* Render Markdown content properly */}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ children }) => (
+                      <h1 className="text-xl font-bold text-slate-100 mt-6 mb-3">
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 className="text-lg font-semibold text-slate-100 mt-5 mb-2">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="text-base font-semibold text-slate-100 mt-4 mb-2">
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-slate-300 mb-3 leading-relaxed">
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc list-inside text-slate-300 mb-3 space-y-1 ml-4">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="list-decimal list-inside text-slate-300 mb-3 space-y-1 ml-4">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-slate-300">
+                        {children}
+                      </li>
+                    ),
+                    code: ({ children, className }) => {
+                      const isInline = !className
+                      if (isInline) {
+                        return (
+                          <code className="bg-slate-800 text-slate-200 px-2 py-1 rounded text-sm font-mono">
+                            {children}
+                          </code>
+                        )
+                      }
+                      return (
+                        <code className="block bg-slate-900 text-slate-100 p-3 rounded-lg font-mono text-sm overflow-x-auto my-3">
+                          {children}
+                        </code>
+                      )
+                    },
+                    pre: ({ children }) => (
+                      <pre className="bg-slate-900 text-slate-100 p-3 rounded-lg font-mono text-sm overflow-x-auto mb-3">
+                        {children}
+                      </pre>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-slate-100">
+                        {children}
+                      </strong>
+                    ),
+                    em: ({ children }) => (
+                      <em className="italic text-slate-200">
+                        {children}
+                      </em>
+                    ),
+                    table: ({ children }) => (
+                      <div className="overflow-x-auto my-4">
+                        <table className="min-w-full border border-slate-700 rounded-lg">
+                          {children}
+                        </table>
+                      </div>
+                    ),
+                    thead: ({ children }) => (
+                      <thead className="bg-slate-800">
+                        {children}
+                      </thead>
+                    ),
+                    tbody: ({ children }) => (
+                      <tbody className="bg-slate-900">
+                        {children}
+                      </tbody>
+                    ),
+                    tr: ({ children }) => (
+                      <tr className="border-b border-slate-700">
+                        {children}
+                      </tr>
+                    ),
+                    th: ({ children }) => (
+                      <th className="px-4 py-2 text-left text-slate-200 font-semibold">
+                        {children}
+                      </th>
+                    ),
+                    td: ({ children }) => (
+                      <td className="px-4 py-2 text-slate-300">
+                        {children}
+                      </td>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-slate-300 my-4">
+                        {children}
+                      </blockquote>
+                    )
+                  }}
+                >
+                  {currentLesson.content}
+                </ReactMarkdown>
                         
                         {currentLesson.hints && currentLesson.hints.length > 0 && (
-                          <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                             <div className="flex items-center space-x-2 mb-3">
-                              <Lightbulb className="w-5 h-5 text-amber-600" />
-                              <h3 className="text-sm font-semibold text-amber-800">Hints</h3>
+                      <Lightbulb className="w-4 h-4 text-amber-400" />
+                      <h3 className="text-sm font-semibold text-amber-300">Hints</h3>
                             </div>
                             <ul className="space-y-2">
                               {currentLesson.hints.map((hint, index) => (
-                                <li key={index} className="text-sm text-amber-700">
-                                  • {hint}
+                        <li key={index} className="text-sm text-amber-200 flex items-start">
+                          <span className="text-amber-400 mr-2">•</span>
+                          <span>{hint}</span>
                                 </li>
                               ))}
                             </ul>
@@ -290,30 +436,9 @@ export default function ProfessionalLessonLayout({
                         )}
                       </div>
                     </div>
-                  ) : (
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Live Preview</h3>
-                      <div className="bg-white border border-gray-200 rounded-lg p-4 min-h-96">
-                        {output ? (
-                          <iframe
-                            srcDoc={output}
-                            className="w-full h-96 border-0"
-                            title="Code Preview"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-96 text-gray-500">
-                            Click &quot;Run Code&quot; to see your output
-                          </div>
-                        )}
                       </div>
                     </div>
                   )}
-                </div>
-              </div>
-            </Panel>
-          </PanelGroup>
-        </div>
-      </div>
     </div>
   );
 }

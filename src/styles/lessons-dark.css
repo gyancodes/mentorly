@@ -1,0 +1,185 @@
+/* Enhanced Dark Mode Styles for Lessons */
+
+/* Custom Scrollbars */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85 / 0.6);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgb(51 65 85 / 0.8);
+}
+
+.scrollbar-thumb-slate-700::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85 / 0.6);
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Enhanced Focus States */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgb(16 185 129);
+  outline-offset: 2px;
+}
+
+/* Glass Effect */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Custom Shadows */
+.shadow-emerald-600\/25 {
+  box-shadow: 0 10px 15px -3px rgb(16 185 129 / 0.25), 0 4px 6px -2px rgb(16 185 129 / 0.1);
+}
+
+/* Monaco Editor Enhancements */
+.monaco-editor {
+  border-radius: 0;
+}
+
+.monaco-editor .margin {
+  background-color: rgb(15 23 42) !important;
+}
+
+.monaco-editor .monaco-editor-background {
+  background-color: rgb(15 23 42) !important;
+}
+
+/* Custom Prose Styles for Dark Mode */
+.prose-invert h1,
+.prose-invert h2,
+.prose-invert h3,
+.prose-invert h4,
+.prose-invert h5,
+.prose-invert h6 {
+  color: rgb(241 245 249);
+}
+
+.prose-invert p {
+  color: rgb(203 213 225);
+}
+
+.prose-invert strong {
+  color: rgb(255 255 255);
+  font-weight: 600;
+}
+
+.prose-invert code {
+  background-color: rgb(51 65 85 / 0.4);
+  color: rgb(203 213 225);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose-invert pre {
+  background-color: rgb(15 23 42);
+  border: 1px solid rgb(51 65 85 / 0.3);
+}
+
+.prose-invert pre code {
+  background-color: transparent;
+  color: rgb(203 213 225);
+  padding: 0;
+}
+
+.prose-invert ul,
+.prose-invert ol {
+  color: rgb(203 213 225);
+}
+
+.prose-invert li {
+  color: rgb(203 213 225);
+}
+
+.prose-invert blockquote {
+  border-left-color: rgb(16 185 129);
+  color: rgb(203 213 225);
+}
+
+/* Panel Resize Handle Enhancement */
+.react-resizable-panel-handle {
+  background: rgb(51 65 85 / 0.3);
+  transition: background-color 200ms ease;
+}
+
+.react-resizable-panel-handle:hover {
+  background: rgb(51 65 85 / 0.6);
+}
+
+/* Button Hover Effects */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg, rgb(51 65 85 / 0.2) 25%, rgb(51 65 85 / 0.4) 50%, rgb(51 65 85 / 0.2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

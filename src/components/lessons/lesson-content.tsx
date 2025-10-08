@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, Target } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import { Card } from '@/components/ui/card'
 import type { Lesson } from '@/lib/lessons-data'
@@ -50,6 +51,7 @@ export default function LessonContent({ lesson }: LessonContentProps) {
         {/* Lesson Content */}
         <div className="prose prose-slate dark:prose-invert max-w-none">
           <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => (
                 <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-4 mt-6">
@@ -107,7 +109,7 @@ export default function LessonContent({ lesson }: LessonContentProps) {
                 </pre>
               ),
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-blue-500 pl-4 italic text-slate-600 dark:text-slate-300 mb-4">
+                <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-slate-600 dark:text-slate-300 mb-4">
                   {children}
                 </blockquote>
               ),
@@ -115,6 +117,38 @@ export default function LessonContent({ lesson }: LessonContentProps) {
                 <strong className="font-semibold text-slate-800 dark:text-white">
                   {children}
                 </strong>
+              ),
+              table: ({ children }) => (
+                <div className="overflow-x-auto my-4">
+                  <table className="min-w-full border border-slate-300 dark:border-slate-700 rounded-lg">
+                    {children}
+                  </table>
+                </div>
+              ),
+              thead: ({ children }) => (
+                <thead className="bg-slate-100 dark:bg-slate-800">
+                  {children}
+                </thead>
+              ),
+              tbody: ({ children }) => (
+                <tbody className="bg-white dark:bg-slate-900">
+                  {children}
+                </tbody>
+              ),
+              tr: ({ children }) => (
+                <tr className="border-b border-slate-300 dark:border-slate-700">
+                  {children}
+                </tr>
+              ),
+              th: ({ children }) => (
+                <th className="px-4 py-2 text-left text-slate-800 dark:text-slate-200 font-semibold">
+                  {children}
+                </th>
+              ),
+              td: ({ children }) => (
+                <td className="px-4 py-2 text-slate-600 dark:text-slate-300">
+                  {children}
+                </td>
               )
             }}
           >
