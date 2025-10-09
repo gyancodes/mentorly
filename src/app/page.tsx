@@ -221,8 +221,19 @@ export default function Home() {
 
       {/* Main Content */}
       <main>
-        {/* Hero Section */}
-        <section className='py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-blue-50 dark:from-black dark:to-blue-950/20'>
+        {/* Hero Section - Background Image Only */}
+        <section 
+          className='w-full h-screen bg-cover bg-center bg-no-repeat bg-fixed'
+          style={{ backgroundImage: 'url(/bg.png)' }}
+        >
+          {/* Responsive background image only */}
+        </section>
+
+        {/* COMMENTED OUT HERO CONTENT - UNCOMMENT WHEN NEEDED
+        <section 
+          className='py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-no-repeat'
+          style={{ backgroundImage: 'url(/bg.png)' }}
+        >
           <div className='max-w-6xl mx-auto'>
             <motion.div 
               className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'
@@ -299,13 +310,13 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Decorative elements */}
                 <div className='absolute -top-4 -left-4 w-24 h-24 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-2xl opacity-60 -z-10' />
                 <div className='absolute -bottom-4 -right-4 w-32 h-32 bg-blue-300 dark:bg-blue-800/30 rounded-full blur-2xl opacity-60 -z-10' />
               </motion.div>
             </motion.div>
           </div>
         </section>
+        */}
 
         {/* About Section */}
         <section className='py-20 px-4 sm:px-6 lg:px-8'>
