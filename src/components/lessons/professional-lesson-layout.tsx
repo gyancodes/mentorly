@@ -1,6 +1,6 @@
 'use client';
 
-import { 
+import {
   ChevronLeft, 
   ChevronRight, 
   Play, 
@@ -8,9 +8,7 @@ import {
   CheckCircle, 
   Clock,
   BookOpen,
-  Target,
   Lightbulb,
-  Award,
   Maximize2,
   Minimize2,
   Eye,
@@ -19,8 +17,8 @@ import {
   X
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import ReactMarkdown from 'react-markdown';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import remarkGfm from 'remark-gfm';
 
 import type { Lesson, LessonTrack } from '@/lib/lessons-data';
@@ -38,7 +36,6 @@ export default function ProfessionalLessonLayout({
   currentLesson,
   onLessonChange
 }: ProfessionalLessonLayoutProps) {
-  const [activeTab, setActiveTab] = useState<'instructions' | 'preview'>('preview');
   const [code, setCode] = useState(currentLesson?.code || '');
   const [output, setOutput] = useState('');
   const [_isValidated, setIsValidated] = useState(false);
@@ -75,7 +72,7 @@ export default function ProfessionalLessonLayout({
   const currentLessonIndex = track.lessons.findIndex(lesson => lesson.id === currentLesson.id);
   const nextLesson = track.lessons[currentLessonIndex + 1];
   const prevLesson = track.lessons[currentLessonIndex - 1];
-  const progressPercentage = ((currentLessonIndex + 1) / track.lessons.length) * 100;
+  // progressPercentage was unused
 
   return (
     <div className="h-screen bg-slate-950 flex flex-col overflow-hidden">
@@ -272,7 +269,7 @@ export default function ProfessionalLessonLayout({
                             <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
                               <Play className="w-8 h-8 text-slate-400" />
                             </div>
-                            <p className="text-sm text-slate-400">Click "Run" to see your code</p>
+                            <p className="text-sm text-slate-400">Click &quot;Run&quot; to see your code</p>
                           </div>
                         </div>
                       )}

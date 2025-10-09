@@ -2,7 +2,7 @@
 
 import Editor, { type Monaco } from '@monaco-editor/react'
 import { motion } from 'framer-motion'
-import { Play, RotateCcw, Settings, CheckCircle, Lightbulb, Copy, Download } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import type { editor } from 'monaco-editor'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 
@@ -26,13 +26,8 @@ export default function MonacoCodeEditor({
   className = ''
 }: MonacoCodeEditorProps) {
   const [value, setValue] = useState(lesson.code)
-  const [_output, setOutput] = useState('')
   const [isValid, setIsValid] = useState(false)
-  const [showHints, setShowHints] = useState(false)
-  const [currentHintIndex, setCurrentHintIndex] = useState(0)
-  const [theme, setTheme] = useState<'vs-dark' | 'light'>('vs-dark')
-  const [fontSize, setFontSize] = useState(14)
-  const [showSettings, setShowSettings] = useState(false)
+  // Removed unused UI states
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
 
   const validateHTML = useCallback((htmlCode: string): boolean => {
@@ -53,7 +48,7 @@ export default function MonacoCodeEditor({
 
     // Configure Monaco Editor options
     editorInstance.updateOptions({
-      fontSize: fontSize,
+      fontSize: 14,
       fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
       lineNumbers: 'on',
       roundedSelection: false,
@@ -131,62 +126,7 @@ export default function MonacoCodeEditor({
     }
   }
 
-  const runCode = () => {
-    if (language === 'html') {
-      setOutput(value)
-      const isCodeValid = validateHTML(value)
-      setIsValid(isCodeValid)
-      onValidation(isCodeValid)
-    }
-    onCodeChange(value)
-  }
-
-  const resetCode = () => {
-    setValue(lesson.code)
-    setOutput('')
-    setIsValid(false)
-    setShowHints(false)
-    setCurrentHintIndex(0)
-    onValidation(false)
-    if (editorRef.current) {
-      editorRef.current.setValue(lesson.code)
-    }
-  }
-
-  const formatCode = () => {
-    if (editorRef.current) {
-      const action = editorRef.current.getAction('editor.action.formatDocument')
-      if (action) {
-        action.run()
-      }
-    }
-  }
-
-  const copyCode = () => {
-    navigator.clipboard.writeText(value)
-  }
-
-  const downloadCode = () => {
-    const blob = new Blob([value], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `lesson-code.${language}`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
-  const nextHint = () => {
-    if (currentHintIndex < lesson.hints.length - 1) {
-      setCurrentHintIndex(currentHintIndex + 1)
-    }
-  }
-
-  const prevHint = () => {
-    if (currentHintIndex > 0) {
-      setCurrentHintIndex(currentHintIndex - 1)
-    }
-  }
+  // Removed unused actions (run/reset/format/copy/download and hint navigation)
 
   return (
     <div className={`flex flex-col h-full bg-slate-950 ${className}`}>

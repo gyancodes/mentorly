@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, Play, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { lessonTracks } from '@/lib/lessons-data'
+
 import '@/styles/lessons-dark.css'
 
 const lessons = [
