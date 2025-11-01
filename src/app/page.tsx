@@ -244,8 +244,17 @@ export default function Home() {
 
       {/* Main Content */}
       <main>
-        <section className='py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-no-repeat'>
-          <div className='max-w-6xl mx-auto'>
+        <section className='min-h-screen py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20 relative overflow-hidden'>
+          <div className='absolute inset-0 bg-grid-gray-900/[0.04] dark:bg-grid-white/[0.02] bg-[size:60px_60px]' />
+          <motion.div
+            className='absolute inset-0 flex items-center justify-center opacity-30 dark:opacity-20'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }}
+            transition={{ duration: 1 }}
+          >
+            <div className='w-full h-full bg-white dark:bg-black bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]' />
+          </motion.div>
+          <div className='max-w-6xl mx-auto relative'>
             <motion.div
               className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'
               initial='hidden'
@@ -258,85 +267,157 @@ export default function Home() {
                 variants={fadeIn}
               >
                 <motion.div
-                  className='inline-block px-4 py-2 border border-blue-600 rounded-full text-sm font-medium text-blue-600 mb-8 tracking-wider'
-                  whileHover={{ scale: 1.05 }}
+                  className='inline-block px-4 py-2 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-600/20 dark:border-blue-500/20 rounded-full text-sm font-semibold text-blue-600 dark:text-blue-400 mb-8 tracking-wider backdrop-blur-sm'
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(37, 99, 235, 0.15)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  AI • GROWTH • MENTORSHIP
+                  INTERVIEWS • CODING • TECH SKILLS
                 </motion.div>
-                <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6'>
-                  AI-Powered
-                  <span className='block text-blue-600'>Growth Mentorship</span>
-                </h1>
-                <p className='text-lg sm:text-xl mb-10 max-w-2xl mx-auto lg:mx-0 text-gray-700 dark:text-gray-300'>
-                  Connect with AI mentors, track your progress, and accelerate
-                  your learning with personalized guidance and interactive
-                  coding lessons.
-                </p>
+                <motion.h1
+                  className='text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white'
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  Ace Your Tech
+                  <span className='block text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-500 bg-clip-text'>
+                    Interviews & Career
+                  </span>
+                </motion.h1>
+                <motion.p
+                  className='text-lg sm:text-xl mb-10 max-w-2xl mx-auto lg:mx-0 text-gray-600 dark:text-gray-300 leading-relaxed'
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  Master technical interviews, learn coding, and build in-demand tech skills with 
+                  AI-powered practice, personalized feedback, and interactive learning paths.
+                </motion.p>
 
                 <div className='flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8'>
                   <motion.button
                     onClick={handleAnonymousChat}
-                    className='px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors cursor-pointer tracking-wider text-base'
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    className='group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 cursor-pointer tracking-wider text-base overflow-hidden'
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    START SESSION
+                    <span className='absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200'/>
+                    <span className='relative flex items-center'>
+                      START SESSION
+                      <svg className='w-5 h-5 ml-2 -mr-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+                      </svg>
+                    </span>
                   </motion.button>
                   <motion.button
                     onClick={() => router.push('/login')}
-                    className='px-6 py-3 border-2 border-black dark:border-white font-bold rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer tracking-wider text-base'
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    className='group relative px-8 py-4 bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-gray-900/10 dark:border-white/10 text-gray-900 dark:text-white font-bold rounded-xl hover:shadow-lg hover:shadow-gray-500/10 dark:hover:shadow-white/5 transition-all duration-200 cursor-pointer tracking-wider text-base'
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    JOIN WAITLIST
+                    <span className='absolute inset-0 bg-gray-900 dark:bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-200'/>
+                    <span className='relative flex items-center'>
+                      JOIN WAITLIST
+                      <svg className='w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 8l4 4m0 0l-4 4m4-4H3' />
+                      </svg>
+                    </span>
                   </motion.button>
                 </div>
               </motion.div>
 
               <motion.div className='relative' variants={fadeIn}>
-                <div className='relative z-10 bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-800'>
-                  <div className='flex items-center space-x-3 mb-6'>
-                    <div className='w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center'>
-                      <svg
-                        className='w-5 h-5 text-white'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
-                        />
-                      </svg>
+                <div className='relative z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-gray-200/50 dark:border-gray-800/50'>
+                  <div className='flex items-center space-x-4 mb-6'>
+                    <div className='relative'>
+                      <div className='w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg'>
+                        <svg
+                          className='w-6 h-6 text-white'
+                          fill='none'
+                          stroke='currentColor'
+                          viewBox='0 0 24 24'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
+                          />
+                        </svg>
+                      </div>
+                      <div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900'></div>
                     </div>
-                    <span className='font-bold'>Mentorly AI</span>
+                    <div>
+                      <span className='font-bold text-lg'>Mentorly AI</span>
+                      <div className='text-sm text-green-600 dark:text-green-400'>Online</div>
+                    </div>
                   </div>
 
                   <div className='space-y-4'>
-                    <div className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg'>
-                      <p className='text-sm'>
-                        How can I improve my web development skills?
+                    <motion.div 
+                      className='bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-800/50 p-4 rounded-2xl shadow-sm'
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <p className='text-sm font-medium'>
+                        How can I prepare for technical interviews at top tech companies?
                       </p>
-                    </div>
+                    </motion.div>
 
-                    <div className='bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg'>
-                      <p className='text-sm'>
-                        Based on your goals, I recommend focusing on these three
-                        areas:
+                    <motion.div 
+                      className='bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 p-6 rounded-2xl shadow-sm'
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <p className='text-sm font-medium mb-4'>
+                        Based on current industry trends, I recommend focusing on these key areas:
                       </p>
-                      <ul className='text-sm mt-2 space-y-1 list-disc pl-5'>
-                        <li>Modern JavaScript frameworks (React, Vue)</li>
-                        <li>API development and integration</li>
-                        <li>Responsive design principles</li>
+                      <ul className='text-sm space-y-3 pl-5'>
+                        <li className='flex items-start'>
+                          <svg className='w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                          </svg>
+                          <span>Data Structures & Algorithms optimization</span>
+                        </li>
+                        <li className='flex items-start'>
+                          <svg className='w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                          </svg>
+                          <span>System Design principles</span>
+                        </li>
+                        <li className='flex items-start'>
+                          <svg className='w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                          </svg>
+                          <span>Problem-solving techniques</span>
+                        </li>
                       </ul>
-                      <p className='text-sm mt-2'>
-                        Would you like me to create a personalized learning
-                        path?
+                      <p className='text-sm font-medium mt-4 text-blue-600 dark:text-blue-400'>
+                        Would you like me to create a personalized interview prep plan?
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
+                  <motion.div 
+                    className='mt-4 flex items-center gap-2'
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                  >
+                    <div className='flex-1'>
+                      <div className='h-12 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200/50 dark:border-gray-700/50 px-4 flex items-center text-gray-400 dark:text-gray-500'>
+                        Type your question here...
+                      </div>
+                    </div>
+                    <button className='h-12 px-4 bg-blue-600 hover:bg-blue-700 transition-colors rounded-xl flex items-center justify-center text-white'>
+                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 5l7 7m0 0l-7 7m7-7H3' />
+                      </svg>
+                    </button>
+                  </motion.div>
                 </div>
 
                 <div className='absolute -top-4 -left-4 w-24 h-24 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-2xl opacity-60 -z-10' />
@@ -356,11 +437,11 @@ export default function Home() {
               variants={fadeIn}
             >
               <h2 className='text-3xl font-bold mb-4'>
-                AI Mentorship, <span className='text-blue-600'>Simplified</span>
+                Tech Interview Prep, <span className='text-blue-600'>Mastered</span>
               </h2>
               <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
-                Our platform combines artificial intelligence with proven growth
-                methodologies to provide personalized mentorship at scale.
+                Our platform combines AI-powered interview practice, coding challenges, and 
+                comprehensive tech learning to help students excel in their interviews.
               </p>
             </motion.div>
 
@@ -372,10 +453,16 @@ export default function Home() {
               variants={staggerContainer}
             >
               <motion.div
-                className='bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800'
+                className='group bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-800/50 backdrop-blur-sm relative overflow-hidden'
                 variants={itemFadeIn}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                whileHover={{ 
+                  y: -5, 
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
               >
+                <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+              
                 <div className='w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4'>
                   <svg
                     className='w-6 h-6 text-blue-600'
@@ -392,11 +479,11 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className='text-xl font-bold mb-2'>
-                  Personalized Guidance
+                  Mock Interviews
                 </h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Our AI analyzes your skills, goals, and learning style to
-                  create customized growth plans that evolve with you.
+                  Practice with realistic technical interviews, get instant feedback,
+                  and master common interview patterns with our AI interviewer.
                 </p>
               </motion.div>
 
@@ -420,10 +507,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-xl font-bold mb-2'>Progress Tracking</h3>
+                <h3 className='text-xl font-bold mb-2'>Coding Practice</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Monitor your development with detailed analytics and insights
-                  that highlight strengths and areas for improvement.
+                  Solve real interview coding problems, learn optimal solutions,
+                  and get detailed explanations for data structures and algorithms.
                 </p>
               </motion.div>
 
@@ -447,10 +534,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-xl font-bold mb-2'>24/7 Availability</h3>
+                <h3 className='text-xl font-bold mb-2'>Tech Skills</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Access mentorship whenever you need it, with no scheduling
-                  constraints or time zone limitations.
+                  Learn in-demand technologies through interactive lessons, hands-on
+                  projects, and real-world applications. Perfect for students.
                 </p>
               </motion.div>
             </motion.div>
@@ -504,12 +591,11 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <h3 className='text-xl font-bold'>Growth Mentorship</h3>
+                    <h3 className='text-xl font-bold'>Interview Excellence</h3>
                   </div>
                   <p className='text-gray-700 dark:text-gray-300 mb-4'>
-                    Receive personalized career advice, skill development
-                    recommendations, and strategic guidance from AI mentors
-                    trained on industry best practices.
+                    Master technical interviews with our comprehensive preparation system. 
+                    Practice with AI-powered mock interviews and get detailed feedback to improve.
                   </p>
                   <ul className='space-y-2'>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
@@ -526,7 +612,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Career path optimization
+                      Technical interview simulation
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -542,7 +628,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Skill gap analysis
+                      Real interview questions
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -558,7 +644,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Personalized learning recommendations
+                      Detailed performance analysis
                     </li>
                   </ul>
                 </div>
@@ -585,12 +671,11 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <h3 className='text-xl font-bold'>Progress Tracking</h3>
+                    <h3 className='text-xl font-bold'>Coding Practice</h3>
                   </div>
                   <p className='text-gray-700 dark:text-gray-300 mb-4'>
-                    Visualize your growth journey with comprehensive analytics
-                    and milestone tracking to stay motivated and focused on your
-                    goals.
+                    Master data structures, algorithms, and coding patterns through 
+                    interactive practice sessions and detailed solution explanations.
                   </p>
                   <ul className='space-y-2'>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
@@ -607,7 +692,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Skill development metrics
+                      Algorithm challenges
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -623,7 +708,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Goal achievement tracking
+                      Data structure mastery
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -639,12 +724,114 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Visual progress dashboards
+                      Interactive coding environment
                     </li>
                   </ul>
                 </div>
               </motion.div>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Upcoming AI Features Section */}
+        <section className='py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden'>
+          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-indigo-50/30 to-blue-100/30 dark:from-transparent dark:via-indigo-950/30 dark:to-blue-900/30' />
+          <div className='max-w-6xl mx-auto relative'>
+            <motion.div
+              className='text-center mb-16'
+              initial='hidden'
+              whileInView='visible'
+              viewport={{ once: true }}
+              variants={fadeIn}
+            >
+              <motion.div
+                className='inline-block px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-full mb-4'
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className='text-sm font-semibold text-indigo-600 dark:text-indigo-400'>Coming Soon</span>
+              </motion.div>
+              <h2 className='text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 dark:from-indigo-400 dark:to-blue-400'>
+                Next-Gen AI Interview Features
+              </h2>
+              <p className='text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'>
+                Experience the future of technical interviews with our upcoming AI-powered features
+              </p>
+            </motion.div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+              {/* Real-time AI Interview Analysis */}
+              <motion.div
+                className='group relative bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 backdrop-blur-sm overflow-hidden'
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ 
+                  y: -5,
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+              >
+                <div className='absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                <div className='relative'>
+                  <div className='w-14 h-14 bg-gradient-to-br from-indigo-100 to-blue-50 dark:from-indigo-900/30 dark:to-blue-800/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
+                    <svg className='w-7 h-7 text-indigo-600 dark:text-indigo-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' />
+                    </svg>
+                  </div>
+                  <h3 className='text-xl font-bold mb-3 text-gray-900 dark:text-white'>Real-time Interview Analysis</h3>
+                  <p className='text-gray-600 dark:text-gray-300 mb-4'>Get instant feedback on your communication, technical accuracy, and problem-solving approach during mock interviews.</p>
+                </div>
+              </motion.div>
+
+              {/* Personalized AI Interview Coach */}
+              <motion.div
+                className='group relative bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 backdrop-blur-sm overflow-hidden'
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ 
+                  y: -5,
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+              >
+                <div className='absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                <div className='relative'>
+                  <div className='w-14 h-14 bg-gradient-to-br from-indigo-100 to-blue-50 dark:from-indigo-900/30 dark:to-blue-800/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
+                    <svg className='w-7 h-7 text-indigo-600 dark:text-indigo-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4' />
+                    </svg>
+                  </div>
+                  <h3 className='text-xl font-bold mb-3 text-gray-900 dark:text-white'>AI Interview Coach</h3>
+                  <p className='text-gray-600 dark:text-gray-300 mb-4'>Adaptive coaching that learns your strengths and weaknesses to create personalized interview preparation plans.</p>
+                </div>
+              </motion.div>
+
+              {/* Multi-modal Interview Practice */}
+              <motion.div
+                className='group relative bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-800/50 backdrop-blur-sm overflow-hidden'
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ 
+                  y: -5,
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+              >
+                <div className='absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+                <div className='relative'>
+                  <div className='w-14 h-14 bg-gradient-to-br from-indigo-100 to-blue-50 dark:from-indigo-900/30 dark:to-blue-800/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300'>
+                    <svg className='w-7 h-7 text-indigo-600 dark:text-indigo-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' />
+                    </svg>
+                  </div>
+                  <h3 className='text-xl font-bold mb-3 text-gray-900 dark:text-white'>Virtual Interview Simulator</h3>
+                  <p className='text-gray-600 dark:text-gray-300 mb-4'>Practice with realistic video interviews, whiteboarding sessions, and system design discussions.</p>
+                  
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -827,7 +1014,7 @@ export default function Home() {
         </section>
 
         {/* Testimonials Section */}
-        <section className='py-20 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-blue-950/20'>
+       {/* <section className='py-20 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-blue-950/20'>
           <div className='max-w-6xl mx-auto'>
             <motion.div
               className='text-center mb-16'
@@ -852,7 +1039,7 @@ export default function Home() {
               viewport={{ once: true }}
               variants={staggerContainer}
             >
-              {/* Testimonial 1 */}
+            
               <motion.div
                 className='bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800'
                 variants={itemFadeIn}
@@ -875,7 +1062,7 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {/* Testimonial 2 */}
+             
               <motion.div
                 className='bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800'
                 variants={itemFadeIn}
@@ -898,7 +1085,7 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {/* Testimonial 3 */}
+             
               <motion.div
                 className='bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800'
                 variants={itemFadeIn}
@@ -922,18 +1109,20 @@ export default function Home() {
               </motion.div>
             </motion.div>
           </div>
-        </section>
+        </section> */}
 
         {/* CTA Section */}
-        <section className='py-20 px-4 sm:px-6 lg:px-8'>
+        <section className='py-20 px-4 sm:px-6 lg:px-8 relative'>
+          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/50 to-blue-100/50 dark:from-transparent dark:via-blue-950/20 dark:to-blue-900/30' />
           <motion.div
-            className='max-w-4xl mx-auto bg-blue-600 rounded-2xl overflow-hidden shadow-xl'
+            className='max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl overflow-hidden shadow-2xl relative'
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className='p-8 md:p-12 text-center'>
+            <div className='absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]' />
+            <div className='relative p-8 md:p-12 text-center backdrop-blur-sm'>
               <h2 className='text-3xl font-bold text-white mb-4'>
                 Ready to Accelerate Your Growth?
               </h2>
@@ -944,17 +1133,23 @@ export default function Home() {
               <div className='flex flex-col sm:flex-row justify-center gap-4'>
                 <motion.button
                   onClick={handleAnonymousChat}
-                  className='px-6 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition-colors cursor-pointer tracking-wider text-base'
-                  whileHover={{ scale: 1.05 }}
+                  className='px-8 py-4 bg-white text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-all cursor-pointer tracking-wider text-base shadow-lg hover:shadow-xl backdrop-blur-sm'
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
                   TRY FOR FREE
                 </motion.button>
                 <motion.button
                   onClick={() => router.push('/login')}
-                  className='px-6 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-blue-700 transition-colors cursor-pointer tracking-wider text-base'
-                  whileHover={{ scale: 1.05 }}
+                  className='px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-xl hover:bg-white/10 transition-all cursor-pointer tracking-wider text-base backdrop-blur-sm'
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
                 >
                   JOIN WAITLIST
                 </motion.button>
@@ -990,8 +1185,8 @@ export default function Home() {
                 </span>
               </div>
               <p className='text-sm font-medium tracking-wide mb-4 max-w-md text-gray-700 dark:text-gray-300'>
-                AI-powered growth mentorship platform designed for ambitious
-                professionals seeking to accelerate their career development.
+                AI-powered interview preparation and tech learning platform designed for 
+                students aiming to excel in technical interviews and build successful careers.
               </p>
               <div className='text-xs font-medium tracking-wide text-gray-600 dark:text-gray-400'>
                 © 2024 MENTORLY. ALL RIGHTS RESERVED.
