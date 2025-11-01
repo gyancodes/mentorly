@@ -347,7 +347,7 @@ export default function Home() {
                           />
                         </svg>
                       </div>
-                      <div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900'></div>
+                      <div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900' />
                     </div>
                     <div>
                       <span className='font-bold text-lg'>Mentorly AI</span>
