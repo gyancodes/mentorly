@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Orbitron } from 'next/font/google'
+import { Inter } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
+import { Orbitron } from 'next/font/google'
 
 import './globals.css'
 import { SessionProvider } from '../components/providers/session-provider'
@@ -17,6 +19,8 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
   subsets: ['latin'],
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'monospace']
 })
 
 const orbitron = Orbitron({
