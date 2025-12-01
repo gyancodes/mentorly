@@ -244,7 +244,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main>
-        <section className='min-h-screen py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20 relative overflow-hidden'>
+        <section className='lg:min-h-[calc(100vh-4rem)] pt-20 pb-12 sm:pt-24 sm:pb-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20 relative overflow-hidden'>
           <div className='absolute inset-0 bg-grid-gray-900/[0.04] dark:bg-grid-white/[0.02] bg-[size:60px_60px]' />
           <motion.div
             className='absolute inset-0 flex items-center justify-center opacity-30 dark:opacity-20'
@@ -256,7 +256,7 @@ export default function Home() {
           </motion.div>
           <div className='max-w-6xl mx-auto relative'>
             <motion.div
-              className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'
+              className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center'
               initial='hidden'
               whileInView='visible'
               viewport={{ once: true }}
@@ -267,36 +267,36 @@ export default function Home() {
                 variants={fadeIn}
               >
                 <motion.div
-                  className='inline-block px-4 py-2 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-600/20 dark:border-blue-500/20 rounded-full text-sm font-semibold text-blue-600 dark:text-blue-400 mb-8 tracking-wider backdrop-blur-sm'
+                  className='inline-flex items-center gap-2 px-4 py-2 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-600/20 dark:border-blue-500/20 rounded-full text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 mb-5 sm:mb-6 tracking-wider backdrop-blur-sm'
                   whileHover={{ scale: 1.05, backgroundColor: 'rgba(37, 99, 235, 0.15)' }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  INTERVIEWS • CODING • TECH SKILLS
+                  <span className='inline-flex h-2 w-2 rounded-full bg-green-400 animate-pulse' />
+                  <span>Just build It</span>
                 </motion.div>
                 <motion.h1
-                  className='text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white'
+                  className='text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white'
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                 >
-                  Ace Your Tech
+                  AI mock interviews
                   <span className='block text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-500 bg-clip-text'>
-                    Interviews & Career
+                    for student engineers.
                   </span>
                 </motion.h1>
                 <motion.p
-                  className='text-lg sm:text-xl mb-10 max-w-2xl mx-auto lg:mx-0 text-gray-600 dark:text-gray-300 leading-relaxed'
+                  className='text-sm sm:text-base md:text-lg mb-5 sm:mb-6 max-w-xl mx-auto lg:mx-0 text-gray-600 dark:text-gray-300 leading-relaxed'
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  Master technical interviews, learn coding, and build in-demand tech skills with 
-                  AI-powered practice, personalized feedback, and interactive learning paths.
+                  Practice backend, frontend, and system design rounds with an AI hiring mentor and
+                  prove real skills no bluff, no memorized scripts.
                 </motion.p>
-
-                <div className='flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8'>
+                <div className='flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4 mb-4 sm:mb-5'>
                   <motion.button
                     onClick={handleAnonymousChat}
                     className='group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 cursor-pointer tracking-wider text-base overflow-hidden'
@@ -305,31 +305,33 @@ export default function Home() {
                   >
                     <span className='absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200'/>
                     <span className='relative flex items-center'>
-                      START SESSION
+                      START AI INTERVIEW
                       <svg className='w-5 h-5 ml-2 -mr-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
                       </svg>
                     </span>
                   </motion.button>
                   <motion.button
-                    onClick={() => router.push('/login')}
+                    onClick={() => router.push('/lessons')}
                     className='group relative px-8 py-4 bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-gray-900/10 dark:border-white/10 text-gray-900 dark:text-white font-bold rounded-xl hover:shadow-lg hover:shadow-gray-500/10 dark:hover:shadow-white/5 transition-all duration-200 cursor-pointer tracking-wider text-base'
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className='absolute inset-0 bg-gray-900 dark:bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-200'/>
                     <span className='relative flex items-center'>
-                      JOIN WAITLIST
+                      EXPLORE TRACKS
                       <svg className='w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 8l4 4m0 0l-4 4m4-4H3' />
                       </svg>
                     </span>
                   </motion.button>
                 </div>
+
+                {/* Kept microcopy minimal to avoid overcrowding the hero */}
               </motion.div>
 
-              <motion.div className='relative' variants={fadeIn}>
-                <div className='relative z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-gray-200/50 dark:border-gray-800/50'>
+              <motion.div className='relative mt-6 lg:mt-0' variants={fadeIn}>
+                <div className='relative z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-200/50 dark:border-gray-800/50 max-w-lg mx-auto lg:mx-0'>
                   <div className='flex items-center space-x-4 mb-6'>
                     <div className='relative'>
                       <div className='w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg'>
@@ -437,11 +439,12 @@ export default function Home() {
               variants={fadeIn}
             >
               <h2 className='text-3xl font-bold mb-4'>
-                Tech Interview Prep, <span className='text-blue-600'>Mastered</span>
+                AI Tech Career Prep, <span className='text-blue-600'>Built for Students</span>
               </h2>
               <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
-                Our platform combines AI-powered interview practice, coding challenges, and 
-                comprehensive tech learning to help students excel in their interviews.
+                Mentorly is an AI-based interview and hiring platform where student engineers level up
+                backend, frontend, and problem‑solving skills on real-world tasks and signal their readiness
+                to hiring partners.
               </p>
             </motion.div>
 
@@ -479,11 +482,11 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className='text-xl font-bold mb-2'>
-                  Mock Interviews
+                  AI Mock Interviews
                 </h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Practice with realistic technical interviews, get instant feedback,
-                  and master common interview patterns with our AI interviewer.
+                  Practice realistic backend, frontend, and system design interviews with an AI interviewer,
+                  get instant, structured feedback, and train the way real hiring teams evaluate you.
                 </p>
               </motion.div>
 
@@ -507,10 +510,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-xl font-bold mb-2'>Coding Practice</h3>
+                <h3 className='text-xl font-bold mb-2'>Job-Focused Coding Practice</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Solve real interview coding problems, learn optimal solutions,
-                  and get detailed explanations for data structures and algorithms.
+                  Solve real interview coding problems for backend and frontend roles, learn optimal
+                  solutions, and understand how companies evaluate your DSA and code architecture.
                 </p>
               </motion.div>
 
@@ -534,10 +537,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className='text-xl font-bold mb-2'>Tech Skills</h3>
+                <h3 className='text-xl font-bold mb-2'>AI-Era Tech Skills</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  Learn in-demand technologies through interactive lessons, hands-on
-                  projects, and real-world applications. Perfect for students.
+                  Learn modern stacks (APIs, databases, frontend frameworks, AI tooling) through interactive
+                  lessons, hands-on projects, and hiring-style tasks designed for student engineers.
                 </p>
               </motion.div>
             </motion.div>
@@ -555,11 +558,10 @@ export default function Home() {
               variants={fadeIn}
             >
               <h2 className='text-3xl font-bold mb-4'>
-                Powerful <span className='text-blue-600'>Features</span>
+                Powerful <span className='text-blue-600'>AI Interview Features</span>
               </h2>
               <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
-                Everything you need to accelerate your growth and achieve your
-                career goals.
+                Everything you need to grow from student to hire‑ready engineer for modern AI-first teams.
               </p>
             </motion.div>
 
@@ -591,11 +593,11 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <h3 className='text-xl font-bold'>Interview Excellence</h3>
+                    <h3 className='text-xl font-bold'>Interview & Hiring Readiness</h3>
                   </div>
                   <p className='text-gray-700 dark:text-gray-300 mb-4'>
-                    Master technical interviews with our comprehensive preparation system. 
-                    Practice with AI-powered mock interviews and get detailed feedback to improve.
+                    Master technical interviews with an AI interviewer that scores you like real hiring
+                    panels, highlights weak areas, and shows exactly what to fix before the real thing.
                   </p>
                   <ul className='space-y-2'>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
@@ -612,7 +614,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Technical interview simulation
+                      Technical interview simulations for backend, frontend & full‑stack
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -628,7 +630,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Real interview questions
+                      Questions modeled on real company interview loops
                     </li>
                     <li className='flex items-center text-sm text-gray-700 dark:text-gray-300'>
                       <svg
@@ -644,7 +646,7 @@ export default function Home() {
                           d='M5 13l4 4L19 7'
                         />
                       </svg>
-                      Detailed performance analysis
+                      Detailed performance analysis & improvement plan
                     </li>
                   </ul>
                 </div>
@@ -671,7 +673,7 @@ export default function Home() {
                         />
                       </svg>
                     </div>
-                    <h3 className='text-xl font-bold'>Coding Practice</h3>
+                    <h3 className='text-xl font-bold'>Hiring-Style Coding Labs</h3>
                   </div>
                   <p className='text-gray-700 dark:text-gray-300 mb-4'>
                     Master data structures, algorithms, and coding patterns through 
@@ -852,9 +854,9 @@ export default function Home() {
                 Interactive{' '}
                 <span className='text-blue-600'>Coding Lessons</span>
               </h2>
-              <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
-                Learn web development through hands-on, interactive lessons with
-                real-time feedback and guidance.
+                    <p className='text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto'>
+                Learn backend and frontend foundations through hands-on, interactive lessons with
+                real-time feedback and interview-style checkpoints.
               </p>
             </motion.div>
 
